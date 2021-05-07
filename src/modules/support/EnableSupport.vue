@@ -10,16 +10,16 @@
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
-          <td>Initiator</td>
+          <td>Code</td>
           <td>Assigned To</td>
           <td>Status</td>
-          <td>Request Status</td>
-          <td>Actions</td>
+          <!-- <td>Request Status</td> -->
+          <!-- <td>Actions</td> -->
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
-          <td style="cursor: pointer;" @click="redirect('/thread/:' + item.request_code)">{{item.payload_value}}</td>
+          <td style="cursor: pointer;" @click="redirect('/thread/:' + item.request_code.code)">{{item.payload_value}}</td>
           <td>
               <p v-if="item.assigned_to !== null">{{item.assigned_to}}</p>
               <!--<select v-if="item.assigned_to !== null">
@@ -27,12 +27,12 @@
               </select>-->
               <p v-else>No Assigned </p>
           </td>
-          <td>{{item.status == 0 ? 'DISABLED' : 'ENABLED'}}</td>
-          <td>{{item.request_status == 1 ? 'ON GOING' : 'COMPLETED'}}</td>
-          <td>
+          <td>{{item.request_status === null ? null : item.request_status.status === 1 ? 'ON GOING' : 'COMPLETED' }}</td>
+          <!-- <td>{{item.request_status.status == 1 ? 'ON GOING' : 'COMPLETED'}}</td> -->
+          <!-- <td>
             <button class="btn btn-secondary" @click="messageConfirm(item, a = 'a')"><i class="fa fa-check" style="padding: 0"></i></button>
             <button class="btn btn-danger" @click="messageConfirm(item, a = 'b')"><i class="fa fa-times" style="padding: 0"></i></button>
-          </td>
+          </td> -->
         </tr>
       </tbody>
     </table>
