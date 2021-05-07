@@ -203,14 +203,16 @@ export default{
     meta: {
       tokenRequired: true
     }
-  }, {
-    path: '/thread/:code?',
-    name: 'thread',
-    component: resolve => require(['modules/messengervue/Payhiram.vue'], resolve),
-    meta: {
-      tokenRequired: true
-    }
-  }, {
+  },
+  //  {
+  //   path: '/thread/:code?',
+  //   name: 'thread',
+  //   component: resolve => require(['modules/messengervue/Payhiram.vue'], resolve),
+  //   meta: {
+  //     tokenRequired: true
+  //   }
+  // },
+  {
     path: '/paymentConfirmation/:email/:userCode/:depositCode',
     name: 'paymentConfirmation',
     component: resolve => require(['modules/deposit/PaymentConfirmation.vue'], resolve),
