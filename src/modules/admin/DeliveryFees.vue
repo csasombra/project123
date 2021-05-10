@@ -15,10 +15,9 @@
       <thead>
         <tr>
           <td>Scope</td>
-          <td>Currency</td>
           <td>Minimum Amount</td>
-          <td>Max Amount</td>
-          <td>Charge</td>
+          <td>Minimum Charge</td>
+          <td>Charge per distance</td>
           <td>Date Added</td>
           <td>Actions</td>
         </tr>
@@ -26,11 +25,10 @@
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
           <td>{{item.scope}}</td>
-          <td>{{item.currency}}</td>
-          <td class="text-primary">{{auth.displayAmountWithCurrency(item.min_amount, item.currency)}}</td>
-          <td class="text-primary">{{auth.displayAmountWithCurrency(item.max_amount, item.currency)}}</td>
-          <td class="text-danger">{{item.type === 'percentage' ? item.charge + ' %' : item.currency + ' ' + item.charge}}</td>
-          <td>{{item.created_at_human}}</td>
+          <td class="text-primary">{{auth.displayAmountWithCurrency(item.minimum_charge, item.currency)}}</td>
+          <td class="text-primary">{{auth.displayAmountWithCurrency(item.minimum_distance, item.currency)}}</td>
+          <td class="text-primary">{{auth.displayAmountWithCurrency(item.addition_charge_per_distance, item.currency)}}</td>
+          <td>{{item.effective_date}}</td>
           <td>
             <button class="btn btn-primary" @click="showModal('update', item)">Edit</button>
           </td>
@@ -47,7 +45,7 @@
 
 
     <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
-    <increment-modal :property="transferModal"></increment-modal>
+    <increment-modal :property="deliveryModal"></increment-modal>
   </div>
 </template>
 <style scoped>
