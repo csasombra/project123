@@ -47,7 +47,7 @@
 
 
     <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
-    <increment-modal :property="transferModal"></increment-modal>
+    <increment-modal :property="deliveryModal"></increment-modal>
   </div>
 </template>
 <style scoped>
