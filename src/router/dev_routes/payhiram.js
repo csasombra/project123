@@ -162,6 +162,13 @@ export default{
       tokenRequired: true
     }
   }, {
+    path: '/delivery_fees/',
+    name: 'deliveryFees',
+    component: resolve => require(['modules/admin/DeliveryFees.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/transfer_fee_add_charges/',
     name: 'transferFeeAddCharges',
     component: resolve => require(['modules/admin/TransferFeeAddCharges.vue'], resolve),

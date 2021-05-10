@@ -29,7 +29,7 @@
           <td>{{item.currency}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.min_amount, item.currency)}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.max_amount, item.currency)}}</td>
-          <td class="text-danger">{{item.type.toLowerCase() === 'percentage' ? item.charge + ' %' : item.currency + ' ' + item.charge}}</td>
+          <td class="text-danger">{{item.type === 'percentage' ? item.charge + ' %' : item.currency + ' ' + item.charge}}</td>
           <td>{{item.created_at_human}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
