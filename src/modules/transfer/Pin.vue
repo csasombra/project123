@@ -191,6 +191,7 @@ export default {
   },
   methods: {
     show(){
+      console.log('here')
       this.initOtp()
       $('#authenticateOTP').modal('show')
     },

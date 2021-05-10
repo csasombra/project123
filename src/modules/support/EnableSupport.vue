@@ -10,7 +10,7 @@
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
-          <td>Code</td>
+          <td>Initiator</td>
           <td>Assigned To</td>
           <td>Status</td>
           <!-- <td>Request Status</td> -->

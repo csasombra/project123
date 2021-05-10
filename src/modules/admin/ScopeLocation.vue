@@ -7,7 +7,7 @@
       <button class="btn btn-primary pull-right mb-1" @click="showModal('create', null)">Add</button>
     </div>
 
-    <basic-filter 
+    <basic-filter
       v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
