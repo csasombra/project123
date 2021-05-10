@@ -26,7 +26,7 @@
         <tr v-for="(item, index) in data" :key="index">
           <td>{{item.scope}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.minimum_charge, item.currency)}}</td>
-          <td class="text-primary">{{auth.displayAmountWithCurrency(item.minimum_distance, item.currency)}}</td>
+          <td class="text-primary">{{item.minimum_distance + ' KM'}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.addition_charge_per_distance, item.currency)}}</td>
           <td>{{item.effective_date}}</td>
           <td>
@@ -220,7 +220,7 @@ export default{
           let modalData = {...this.deliveryModal}
           let parameter = {
             title: 'Update Requests',
-            route: 'fund_transfer_charges/update',
+            route: 'delivery_fees/update',
             button: {
               left: 'Cancel',
               right: 'Update'
