@@ -108,7 +108,7 @@ import transferCharges from 'src/modules/admin/CreateTransferCharges.js'
 export default{
   mounted(){
     $('#loading').css({display: 'block'})
-    this._retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
+    this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
   },
   data(){
     return {

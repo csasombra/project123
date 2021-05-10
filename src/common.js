@@ -59,7 +59,7 @@ export default {
   settingsMenu: [
     {title: 'Profile', type: 'profile', allowed: ['cellular_number', 'address', 'sex', 'birth_date']},
     {title: 'Account', type: 'account', allowed: []},
-    // {title: 'Business Setting', type: 'merchant', allowed: ['prefix']},
+    {title: 'Business Profile', type: 'merchant', allowed: ['email', 'address']},
     {title: 'Notifications', type: 'notification', allowed: []},
     {title: 'Identifications', type: 'identifications', allowed: []}
   ],

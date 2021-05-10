@@ -15,7 +15,7 @@ let currency = countries.list.map((item, index) => {
 export default {
   id: 'createTransferChargesModal',
   size: 'modal-md',
-  title: 'Add Fund Transfer Fee',
+  title: 'Add Delivery Fees',
   background: null,
   inputs: [{
     row: 'full',
@@ -47,29 +47,6 @@ export default {
     }
   }, {
     row: 'full',
-    label: 'Destination',
-    variable: 'destination',
-    placeholder: 'Destination',
-    value: null,
-    required: true,
-    id: 'destination',
-    type: 'input',
-    inputType: 'text',
-    validation: {
-      size: 1,
-      type: 'text'
-    }
-  }, {
-    row: 'full',
-    label: 'Type',
-    variable: 'type',
-    value: null,
-    required: true,
-    id: 'type',
-    type: 'select_specified',
-    options: types
-  }, {
-    row: 'full',
     label: 'Currency',
     variable: 'currency',
     placeholder: 'Currency',
@@ -84,12 +61,12 @@ export default {
     }
   }, {
     row: 'full',
-    label: 'Minimum Amount',
-    variable: 'minimum_amount',
-    placeholder: 'Minimum Amount',
+    label: 'Minimum Charge',
+    variable: 'minimum_charge',
+    placeholder: 'Minimum Charge',
     value: null,
     required: true,
-    id: 'minimum_amount',
+    id: 'minimum_charge',
     type: 'input',
     inputType: 'number',
     validation: {
@@ -98,12 +75,12 @@ export default {
     }
   }, {
     row: 'full',
-    label: 'Maximum Amount',
-    variable: 'maximum_amount',
-    placeholder: 'Maximum Amount',
+    label: 'Minimum Distance',
+    variable: 'minimum_distance',
+    placeholder: 'Minimum Distance',
     value: null,
     required: true,
-    id: 'maximum_amount',
+    id: 'minimum_distance',
     type: 'input',
     inputType: 'number',
     validation: {
@@ -112,12 +89,12 @@ export default {
     }
   }, {
     row: 'full',
-    label: 'Charge',
-    variable: 'charge',
+    label: 'Additional Charge Per Distance',
+    variable: 'addition_charge_per_distance',
     placeholder: 'Charge',
     value: null,
     required: true,
-    id: 'charge',
+    id: 'addition_charge_per_distance',
     type: 'input',
     inputType: 'number',
     validation: {
@@ -125,7 +102,7 @@ export default {
       type: 'text'
     }
   }],
-  route: 'fund_transfer_charges/create',
+  route: 'delivery_fees/create',
   button: {
     left: 'Cancel',
     right: 'Submit'
