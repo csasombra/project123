@@ -134,6 +134,13 @@ export default{
       tokenRequired: true
     }
   }, {
+    path: '/account_dashboard/',
+    name: 'accountDashboard',
+    component: resolve => require(['modules/admin/AccountDashboard.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/adminWithdrawals/',
     name: 'adminWithdrawals',
     component: resolve => require(['modules/admin/Withdrawals.vue'], resolve),
