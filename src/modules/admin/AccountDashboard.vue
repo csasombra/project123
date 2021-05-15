@@ -66,6 +66,7 @@
         </div>
       </div>
     </div>
+    <!-- <PendingRequestsTable></PendingRequestsTable> -->
   </div>
 </template>
 <style lang='scss' scoped>
@@ -107,6 +108,7 @@ p{
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
+// import PendingRequestsTable from 'src/modules/admin/PendingRequests.vue'
 export default {
   data() {
     return {
@@ -119,12 +121,14 @@ export default {
       admin: null
     }
   },
-  components: {},
+  components: {
+    // PendingRequestsTable
+  },
   mounted() {
-    this.retrieveUsers()
-    this.retrieveUsersVerified()
-    this.retrievePartner()
-    this.retrieveAdmin()
+    // this.retrieveUsers()
+    // this.retrieveUsersVerified()
+    // this.retrievePartner()
+    // this.retrieveAdmin()
   },
   methods: {
     redirect(params) {
