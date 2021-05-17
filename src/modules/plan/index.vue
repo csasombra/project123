@@ -173,10 +173,8 @@ export default{
       $('#loading').css({display: 'block'})
       this.APIRequest('plans/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        console.log('[Enable Supports]', response.data)
         if(response.data.length > 0){
           this.data = response.data
-          console.log(this.data)
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit) ? 1 : 0
         }else{
           this.data = null

@@ -1,43 +1,50 @@
 <template>
   <div style="margin-top: 5%" class="row">
-    <div class="ledgers-container-item col-4">
-      <span class="body">
-        <label>
-          fasdf
-        </label>
-        <label class="pull-right amount"><b>sdfasdf</b></label>
-      </span>
-      <span class="footer">
-        <label style="padding: 10px">
-          Transaction ID:
-        </label>
-      </span>
+    <div class="ledgers-container-item col-6">
+      <h5 style="margin-top: 3%">Pending Requests for Account Verification</h5>
+      <hr>
+      <table class="table table-bordered table-responsive" v-if="pending != null">
+      <thead>
+        <tr>
+          <td>Account</td>
+          <td>Account Type</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in pending" :key="index">
+          <td>
+            {{item.username}}
+          </td>
+          <td>
+            {{item.account_type}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <empty v-if="pending === null" :title="'No Pending Requests for Account Verification!'" ></empty>
     </div>
-    <div class="ledgers-container-item col-4">
-      <span class="body">
-        <label>
-          fasdf
-        </label>
-        <label class="pull-right amount"><b>sdfasdf</b></label>
-      </span>
-      <span class="footer">
-        <label style="padding: 10px">
-          Transaction ID:
-        </label>
-      </span>
-    </div>
-    <div class="ledgers-container-item col-4">
-      <span class="body">
-        <label>
-          fasdf
-        </label>
-        <label class="pull-right amount"><b>sdfasdf</b></label>
-      </span>
-      <span class="footer">
-        <label style="padding: 10px">
-          Transaction ID:
-        </label>
-      </span>
+    <div class="ledgers-container-item col-6">
+      <h5 style="margin-top: 3%">Pending Requests for Partners</h5>
+      <hr>
+      <table class="table table-bordered table-responsive" v-if="data != null">
+      <thead>
+        <tr>
+          <td>Account</td>
+          <td>Plan</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(item, index) in data" :key="index">
+          <td>
+            {{item.account.username}}
+          </td>
+          <td>
+            {{item.plan}}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <empty v-if="data === null" :title="'No Pending Requests for Partners!'" ></empty>
     </div>
   </div>
 </template>
@@ -46,13 +53,12 @@
 .fas{
   padding-right: 0px !important;
 }
-.ledgers-container-item{
-  border: solid 1px #ddd;
-//   margin-left: 10px;
-//   margin-right: 10px
-}
 .row{
-  width: 95%
+  width: 95%;
+  margin-left: 3%;
+}
+h5{
+  text-align: center;
 }
 </style>
 <script>
@@ -65,6 +71,7 @@ export default{
       ROUTER.push('/marketplace')
     }
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    this.retrievePendingAccount()
   },
   data(){
     return {
@@ -73,43 +80,55 @@ export default{
       auth: AUTH,
       limit: 5,
       activePage: 0,
-      offset: 0
+      offset: 0,
+      pending: null
     }
   },
-  components: {},
+  components: {
+    'empty': require('components/increment/generic/empty/Empty.vue')
+  },
   methods: {
     retrieve(sort, filter){
       if(sort !== null){
-        this.sort = sort
+        this.currentSort = sort
       }
       if(filter !== null){
-        this.filter = filter
-      }
-      if(sort === null && this.sort !== null){
-        sort = this.sort
-      }
-      if(filter === null && this.filter !== null){
-        filter = this.filter
+        this.currentFilter = filter
       }
       let parameter = {
         condition: [{
-          value: filter.value + '%',
-          column: filter.column,
-          clause: 'like'
+          column: this.currentFilter.column,
+          clause: 'like',
+          value: '%' + this.currentFilter.value + '%'
         }],
-        sort: sort,
+        sort: this.currentSort,
         limit: this.limit,
-        offset: this.offset
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('location_scopes/retrieve', parameter).then(response => {
+      this.APIRequest('plans/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
-          this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+          response.data.map(el => {
+            if(el.status === 'pending'){
+              this.data = response.data
+            }
+          })
         }else{
           this.data = null
-          this.numPages = null
+        }
+      })
+    },
+    retrievePendingAccount(){
+      let parameter = {
+        status: 'EMAIL_VERIFIED',
+        limit: 10
+      }
+      this.APIRequest('accounts/retrieve_pending_verified', parameter).then(response => {
+        if(response.data.length > 0){
+          this.pending = response.data
+        }else{
+          this.pending = null
         }
       })
     }
