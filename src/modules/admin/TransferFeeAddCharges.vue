@@ -233,7 +233,7 @@ export default{
           modalData = {...modalData, ...parameter} // updated data without
           let object = Object.keys(item)
           modalData.inputs.map(data => {
-            if(data.variable === 'effective_date') {
+            if(data.variable === 'effective_date'){
               data.value = item.effective_date
             }
             if(data.variable === 'destination'){
@@ -244,6 +244,9 @@ export default{
             }
             if(data.variable === 'max_amount'){
               data.value = item.max_amount
+            }
+            if(data.variable === 'type'){
+              data.value = item.type
             }
             if(data.variable === 'charge'){
               data.value = item.charge

@@ -125,7 +125,7 @@ export default {
       type: 'text'
     }
   }],
-  route: 'delivery_fees/create',
+  route: 'fund_transfer_charges/create',
   button: {
     left: 'Cancel',
     right: 'Submit'
