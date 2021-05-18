@@ -16,8 +16,8 @@
         <tr>
           <td>Scope</td>
           <td>Minimum Amount</td>
-          <td>Minimum Charge</td>
-          <td>Charge per distance</td>
+          <td>Minimum Distance</td>
+          <td>Additional Charge / Kilometer</td>
           <td>Date Added</td>
           <td>Actions</td>
         </tr>
