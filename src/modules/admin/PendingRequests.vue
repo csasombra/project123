@@ -1,6 +1,7 @@
 <template>
   <div style="margin-top: 5%" class="row">
-    <div class="ledgers-container-item col-6">
+    <div class="col-1"></div>
+    <div class="ledgers-container-item col-5">
       <h5 style="margin-top: 3%">Pending Requests for Account Verification</h5>
       <hr>
       <table class="table table-bordered table-responsive" v-if="pending != null">
@@ -23,7 +24,8 @@
     </table>
     <empty v-if="pending === null" :title="'No Pending Requests for Account Verification!'" ></empty>
     </div>
-    <div class="ledgers-container-item col-6">
+    <div class="col-1"></div>
+    <div class="ledgers-container-item col-4">
       <h5 style="margin-top: 3%">Pending Requests for Partners</h5>
       <hr>
       <table class="table table-bordered table-responsive" v-if="data != null">
@@ -46,6 +48,7 @@
     </table>
     <empty v-if="data === null" :title="'No Pending Requests for Partners!'" ></empty>
     </div>
+    <div class="col-1"></div>
   </div>
 </template>
 <style lang="scss" scoped> 

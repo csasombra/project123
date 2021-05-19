@@ -13,7 +13,6 @@
                     No. of Users
                 </p>
               </div>
-            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
           </div>
         </div>
       </div>
@@ -29,7 +28,6 @@
                     No. of Verified Users
                 </p>
               </div>
-            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
           </div>
         </div>
       </div>
@@ -45,7 +43,6 @@
                     No. of Partners
                 </p>
               </div>
-            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
           </div>
         </div>
       </div>
@@ -61,7 +58,6 @@
                     No. of Admins
                 </p>
               </div>
-            <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
           </div>
         </div>
       </div>
@@ -86,6 +82,8 @@ p{
 }
 .card{
   border-radius: 25px;
+  width: 80%;
+  height: 95%;
   border-bottom-color: $primary !important;
 }
 .roa{
@@ -136,8 +134,7 @@ export default {
     },
     retrieveUsers(){
       let parameter = {
-        accountType: 'USER',
-        status: 'EMAIL_VERIFIED'
+        accountType: 'USER'
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve_type_size', parameter).then(response => {
