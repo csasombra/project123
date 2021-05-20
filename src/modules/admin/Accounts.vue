@@ -10,10 +10,8 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
 
-        <h2>&nbsp;</h2>
-        <br>
-
-        <ul class="nav nav-tabs nav-justified">
+      <div class="incre-row">
+        <ul class="nav nav-tabs nav-justified" style="line-height: 40px;">
           <li class="nav-item">
             <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User</a>
           </li>
@@ -36,6 +34,7 @@
             <a class="nav-link" @click.prevent="setActive('ADMIN')" :class="{ active: isActive('admin') }" href="#admin">Admin</a>
           </li>
         </ul>
+      </div>
         <div class="tab-content py-3" id="myTabContent">
           <div class="tab-pane fade" :class="{ 'active show': isActive('user') }" id="user">User content</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('partner') }" id="partner">Partner content</div>
@@ -50,6 +49,7 @@
         <tr>
           <td>Date</td>
           <td>Username</td>
+          <td>Name</td>
           <td>Email</td>
           <td>Type</td>
           <!-- <td>Country & Region</td>
@@ -64,6 +64,7 @@
           <td>
             <label class="action-link text-primary" @click="showProfileModal(item)">{{item.username}}</label>
           </td>
+          <td>{{item.account.information.first_name + ' ' + item.account.information.middle_name + ' ' + item.account.information.last_name}}</td>
           <td>{{item.email}}</td>
           <td>
             <label v-if="editTypeIndex !== index">{{item.account_type}}</label>
@@ -102,7 +103,9 @@
       </tbody>
     </table>
     <div>
-      <button class="btn btn-primary pull-right" v-if="data.length > 0" @click="seeMore(sort, filter)">See More</button>
+      <!-- <button class="btn btn-primary pull-right" v-if="data.length > 0" @click="seeMore(sort, filter)">See More</button> -->
+      <!-- <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
+      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button> -->
     </div>
 
      <!-- <Pager
@@ -115,6 +118,10 @@
     <empty v-if="data.length <= 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <profile :item="selecteditem"></profile>
     <increment-modal :property="scopeLocation"></increment-modal>
+    <div>
+      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
+      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
+    </div>
   </div>
 </template>
 <style scoped>
@@ -224,10 +231,18 @@ export default{
           payload_value: 'desc'
         }, {
           title: 'Type ascending',
-          payload: 'status',
+          payload: 'account_type',
           payload_value: 'asc'
         }, {
           title: 'Type descending',
+          payload: 'account_type',
+          payload_value: 'desc'
+        }, {
+          title: 'Status ascending',
+          payload: 'status',
+          payload_value: 'asc'
+        }, {
+          title: 'Status descending',
           payload: 'status',
           payload_value: 'desc'
         }, {
@@ -291,6 +306,8 @@ export default{
       this.$children[1].$children[0].retrieveLocation(item)
       this.$children[1].$children[0].retrieveImage(item)
       this.selecteditem['payload'] = 'account'
+      this.$children[1].$children[0].$children[0].retrieveRatings(item)
+      // this.$children[1].$children[0].$children[0].retrieveRatings()
       $('#profileModal').modal('show')
     },
     redirect(params){
@@ -335,6 +352,15 @@ export default{
           this.numPages = null
         }
       })
+    },
+    pagination(flag){
+      if(flag === false && this.offset > 5){
+        this.offset = this.offset - 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }else{
+        this.offset = this.offset + 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }
     },
     retrieve(sort, filter){
       if(sort !== null){
@@ -389,6 +415,18 @@ export default{
       let parameter = {
         id: item.id.id,
         status: 'NOT_VERIFIED'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('accounts/update_verification', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        this.retrieve(null, null)
+      })
+      $('#profileModal').modal('hide')
+    },
+    updateStatusByParams(item, status){
+      let parameter = {
+        id: item.id,
+        status: status
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/update_verification', parameter).then(response => {

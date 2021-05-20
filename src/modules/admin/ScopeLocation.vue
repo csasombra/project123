@@ -53,7 +53,8 @@
       </tbody>
     </table>
     <div>
-      <button class="btn btn-primary pull-right" @click="seeMore()">See More</button>
+      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
+      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
     </div>
 
     <!-- <Pager
@@ -99,6 +100,7 @@ export default{
       auth: AUTH,
       limit: 5,
       activePage: 0,
+      offset: 0,
       numPages: null,
       modalProperty: propertyModal,
       filter: null,
@@ -205,9 +207,14 @@ export default{
     setOnRemoveItem(item){
       this.$refs.confirmation.show(item.id)
     },
-    seeMore(){
-      this.limit = this.limit + 5
-      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    pagination(flag){
+      if(flag === false && this.offset > 5){
+        this.offset = this.offset - 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }else{
+        this.offset = this.offset + 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }
     },
     retrieve(sort, filter){
       if(sort !== null){
@@ -230,7 +237,7 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: this.activePage
+        offset: this.offset
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('location_scopes/retrieve', parameter).then(response => {
@@ -255,5 +262,4 @@ export default{
     }
   }
 }
-
 </script>

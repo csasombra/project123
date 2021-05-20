@@ -3,38 +3,42 @@
     <profile-header :item="item" v-if="item.account !== null" :location="localCode"></profile-header>
     <br>
     <br>
-    <div style="margin-right: 15%; margin-left: 15%;">
-      <center>
-        <button v-if="localCode === null" class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="location(item)">Scope Location</button>
-        <button v-if="item.status != 'BLOCKED'" class="btn btn-danger" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, message = 'a')">Block Account</button>
-        <button v-else class="btn btn-danger" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, message = 'c')">Unblock Account</button>
-        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" v-if="item.status !== 'GRANTED' && item.status !== 'BLOCKED'" @click="verify(item, message = 'b')">Verify Account</button>
-      </center>
+    <div class="incre-row" style="margin-top: 25px;">
+      <label class="title"><b>Actions</b></label>
+      <div class="incre-row">
+        <button v-if="item.status != 'BLOCKED'" class="btn btn-danger" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'BLOCKED')">Block Account</button>
+        <button v-else class="btn btn-danger" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, '_VERIFIED')">Unblock Account</button>
+        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'ACCOUNT_VERIFIED')">Account Verified</button>
+        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'BASIC_VERIFIED')">Basic Verified</button>
+        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'STANDARD_VERIFIED')">Standard Verified</button>
+        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'BUSINESS_VERIFIED')">Business Verified</button>
+        <button class="btn btn-primary" style="margin-top: 3%; margin-bottom: 3%" @click="verify(item, 'ENTERPISE_VERIFIED')">Enterprise Verified</button>
+      </div>
+    </div>
+    <div class="incre-row" v-if="localCode !== null">
+      <label class="title"><b>Location Assigned</b></label>
+       <div class="incre-row" style="margin-bottom: 30px;">
+          <label v-if="localCode !== null">
+            <b>{{localCode.code.toUpperCase()}}</b> - {{`${localCode.route}, ${localCode.locality}, ${localCode.region}, ${localCode.country}`}}
+          </label>
+          <br>
+          <span class="form-group">
+            <input type="text" class="form-control"  style="width: 30%; float: left !important; margin-right: 10px;" v-model="scope"/>
+            <button class="btn btn-primary" @click="updateScope()">Update Scope</button>
+          </span>
+       </div>
     </div>
     <basic :item="item"></basic>
     <ids :item="uploadImage"></ids>
     <br>
-    <!-- <educations :data="item.educations" v-if="item.educations !== null"></educations>
-    <works :data="item.works" v-if="item.works !== null"></works> -->
-    <!-- <ids :data="item.cards" v-if="item.cards !== null"></ids> -->
-    <!-- <payments :data="item.cards" v-if="item.cards !== null"></payments> -->
-    <!-- <comakers :data="item.comakers" v-if="item.comakers !== null && item.payload === 'request'"></comakers>
-    <guarantors :data="item.guarantors" v-if="item.guarantors !== null"></guarantors> -->
-<!--     <reviews :item="item" v-if="item.account !== null"></reviews> -->
-    <!-- <div class="text-center">
-      <button class="btn danger action p-3 text-white">Decline</button>
-      <button class="btn success action p-3 text-white">Accept</button> -->
-      <!-- <button class="btn danger action p-3">Remove</button> -->
-    <!-- </div> -->
-
     <view-location
      ref="locate"
     ></view-location>
     <Confirmation
       ref="confirm"
       :title="'Message'"
-      :message="message === 'a' ? 'Are you sure you want to block this user?' : message === 'c' ? 'Are you sure you want to unblock this user?': 'Are you sure you want to validate this account?'"
-      @onConfirm="message === 'a' ? blockUser($event) : message === 'c' ? unblockUser($event) : verifyUser($event)"
+      :message="'Are you sure you want to ' + message + ' this account?'"
+      @onConfirm="verifyUser($event)"
     ></Confirmation>
   </div>
 </template>
@@ -72,7 +76,8 @@ export default{
       data: null,
       uploadImage: [],
       localCode: null,
-      message: null
+      message: null,
+      scope: null
     }
   },
   props: ['item'],
@@ -95,10 +100,14 @@ export default{
       ROUTER.push(parameter)
     },
     verify(item, message){
+      this.message = message
       this.$refs.confirm.show(item, message)
     },
     verifyUser(data){
-      this.$parent.$parent.update(data)
+      if(this.message == null){
+        return
+      }
+      this.$parent.$parent.updateStatusByParams(data, this.message)
     },
     unblockUser(data){
       this.$parent.$parent.updateStat(data)
@@ -112,6 +121,24 @@ export default{
     viewId(item){
       this.$refs.upload.showModal(item)
     },
+    updateScope(){
+      if(this.localCode === null){
+        return
+      }
+      if(this.localCode.account_id !== this.item.id){
+        return
+      }
+      if(this.scope === null || this.scope === ''){
+        return
+      }
+      let parameter = {
+        id: this.localCode.id,
+        code: this.scope
+      }
+      this.APIRequest('locations/update', parameter).then(response => {
+        this.retrieveLocation(this.item)
+      })
+    },
     retrieveLocation(item){
       let parameter = {
         condition: [{
@@ -122,7 +149,7 @@ export default{
       }
       this.APIRequest('locations/retrieve', parameter).then(response => {
         if(response.data.length > 0){
-          this.localCode = response.data[0].code
+          this.localCode = response.data[0]
         }else{
           this.localCode = null
         }

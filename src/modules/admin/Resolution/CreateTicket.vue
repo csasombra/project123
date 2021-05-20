@@ -36,7 +36,7 @@
         <span>Assignee</span>
         <br>
         <assignees ref="assign"></assignees>
-        <span @click="showAssignees()" style="color:grey; cursor: pointer;">{{ assignee ? assignee : 'no assigned resolver'}}</span> <i class="fa fa-plus" aria-hidden="true" style="float:right"></i>
+        <span @click="showAssignees()" style="color:grey; cursor: pointer;"><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ assignee ? assignee : 'Add assigned resolver'}}</u></span>
       </div>
       <hr>
       <span>Status</span>

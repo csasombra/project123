@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown" id="label">
     <div v-if="isChangeable" data-toggle="dropdown">Labels<i class="fa fa-cog"></i></div>
-    <div v-else >Labels<i class="fa fa-cog"></i></div>
+    <div v-else >Labels</div>
     <ul class="dropdown-menu" v-if="isChangeable" ref="dropdownMenu" v-observe-visibility="dropdownExited" > 
       <input type="text" 
       placeholder="Enter issue type"

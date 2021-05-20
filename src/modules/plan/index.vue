@@ -15,6 +15,7 @@
           <td>Merchant</td>
           <td>Amount</td>
           <td>Status</td>
+          <td>Actions</td>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,10 @@
           <td>{{item.merchant ? item.merchant.name : null}}</td>
           <td>{{item.currency + ' ' + item.amount}}</td>
           <td>{{item.status}}</td>
+          <td>
+            <i class="fas fa-check text-primary" @click="updateItem(item)"></i>
+            <i class="fas fa-trash text-danger" @click="removeItem(item)"></i>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -34,7 +39,6 @@
       v-if="data !== null"
     />
     <empty v-if="data === null" :title="'No plans found!'" ></empty>
-    <browse-images-modal></browse-images-modal>
 
   </div>
 </template>
@@ -141,7 +145,6 @@ export default{
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager
@@ -188,6 +191,27 @@ export default{
         case 'list': this.listStyle = 'list'
           break
       }
+    },
+    removeItem(item){
+      let parameter = {
+        id: item.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('plans/delete', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      })
+    },
+    updateItem(item){
+      let parameter = {
+        id: item.id,
+        status: 'approved'
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('plans/update', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      })
     }
   }
 }

@@ -109,7 +109,7 @@ export default {
       type: 'text'
     }
   }],
-  route: 'location_scopes/create',
+  route: 'location_scopes/create_scope',
   button: {
     left: 'Cancel',
     right: 'Submit'

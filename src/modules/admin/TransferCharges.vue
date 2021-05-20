@@ -15,7 +15,6 @@
       <thead>
         <tr>
           <td>Scope</td>
-          <td>Type</td>
           <td>Currency</td>
           <td>Minimum Amount</td>
           <td>Max Amount</td>
@@ -27,11 +26,10 @@
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
           <td>{{item.scope}}</td>
-          <td>{{item.type}}</td>
           <td>{{item.currency}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.min_amount, item.currency)}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.max_amount, item.currency)}}</td>
-          <td class="text-danger">{{item.charge}}</td>
+          <td class="text-danger">{{item.type === 'percentage' ? item.charge + ' %' : item.currency + ' ' + item.charge}}</td>
           <td>{{item.created_at_human}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
@@ -252,6 +250,9 @@ export default{
               data.value = item.scope
             }
             if(data.variable === 'destination'){
+              data.value = item.destination
+            }
+            if(data.variable === 'type'){
               data.value = item.type
             }
             if(data.variable === 'minimum_amount'){

@@ -9,7 +9,7 @@
           </button>
         </label>
         <button v-if="isShow" class="btn btn-primary pull-right" style="float:left !important" @click="showPublicRequest()">back</button>
-        <button class="btn btn-primary pull-right" @click="redirect('/createRequest')">Post a request</button>
+        <!-- <button class="btn btn-primary pull-right" @click="redirect('/createRequest')">Post a request</button> -->
         <!-- <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="redirect('/createRequestBorrow')">Post borrow request</button> -->
         <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('personal')">View my request</button>
         <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('ongoing')">OnGoing Requests</button>

@@ -1,10 +1,4 @@
 import countries from 'src/countries.js'
-let currency = countries.list.map((item, index) => {
-  return {
-    label: item.currency,
-    value: item.currency
-  }
-})
 var types = [{
   label: 'Percentage',
   value: 'percentage'
@@ -12,6 +6,12 @@ var types = [{
   label: 'Fixed Amount',
   value: 'fixed_amount'
 }]
+let currency = countries.list.map((item, index) => {
+  return {
+    label: item.currency,
+    value: item.currency
+  }
+})
 export default {
   id: 'createTransferChargesModal',
   size: 'modal-md',

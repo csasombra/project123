@@ -1,5 +1,7 @@
 <template>
   <div class="ledger-summary-container" style="margin-top: 5%">
+    <div class="incre-row">
+    </div>
     <basic-filter 
       v-bind:category="category" 
       :activeCategoryIndex="0"
@@ -7,7 +9,7 @@
       @changeSortEvent="retrieve($event.sort, $event.filter)"
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
-    <table class="table table-bordered table-responsive"  v-if="data !== null">
+    <table class="table table-bordered table-responsive"  v-if="data != null">
       <thead>
         <td>Date</td>
         <td>Transaction Code</td>
@@ -20,8 +22,8 @@
         <tr v-for="(item, index) in data" :key="index">
           <td>{{item.created_at_human}}</td>
           <td>*****{{item.code.substring(56)}}</td>
-          <td>*****{{item.account_code.substring(24)}}</td>
-          <td>*****{{item.payment_payload_value.substring(24)}}</td>
+          <td>{{item.owner.username}}</td>
+          <td>{{item.receiver.username}}</td>
           <td v-if="item.amount > 0" class="text-primary"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td v-else class="text-danger"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td>{{item.description}}</td>
@@ -29,7 +31,8 @@
       </tbody>
     </table>
     <div>
-      <button class="btn btn-primary pull-right" @click="seeMore()">See More</button>
+      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
+      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
     </div>
     <empty v-if="data === null" :title="'No Transactions yet!'" :action="'Keep growing.'"></empty>
   </div>
@@ -102,8 +105,10 @@
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
+import Pager from 'src/components/increment/generic/pager/Pager.vue'
 export default{
   mounted(){
+    $('#loading').css({display: 'block'})
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
   },
   data(){
@@ -111,8 +116,10 @@ export default{
       user: AUTH.user,
       data: null,
       auth: AUTH,
-      limit: 10,
+      limit: 5,
+      numPages: null,
       activePage: 0,
+      offset: 0,
       category: [{
         title: 'Sort by',
         sorting: [{
@@ -141,19 +148,19 @@ export default{
           payload_value: 'desc'
         }, {
           title: 'Sender ascending',
-          payload: 'account_code',
+          payload: 'owner.username',
           payload_value: 'asc'
         }, {
           title: 'Sender descending',
-          payload: 'account_code',
+          payload: 'owner.username',
           payload_value: 'desc'
         }, {
           title: 'Receiver ascending',
-          payload: 'payment_payload_value',
+          payload: 'receiver.username',
           payload_value: 'asc'
         }, {
           title: 'Receiver descending',
-          payload: 'payment_payload_value',
+          payload: 'receiver.username',
           payload_value: 'desc'
         }]
       }],
@@ -172,6 +179,15 @@ export default{
     seeMore() {
       this.limit = this.limit + 5
       this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    },
+    pagination(flag){
+      if(flag === false && this.offset > 5){
+        this.offset = this.offset - 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }else{
+        this.offset = this.offset + 5
+        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      }
     },
     retrieve(sort, filter){
       if(sort !== null){
@@ -194,14 +210,13 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: this.activePage
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('ledger/transaction_history', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response != null){
           this.data = response.data
-          console.log('[res]', response.data)
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
@@ -212,15 +227,15 @@ export default{
         //   this.data = null
         // }
       })
-    },
-    manageGrid(event){
-      switch(event){
-        case 'th-large': this.listStyle = 'columns'
-          break
-        case 'list': this.listStyle = 'list'
-          break
-      }
     }
+    // manageGrid(event){
+    //   switch(event){
+    //     case 'th-large': this.listStyle = 'columns'
+    //       break
+    //     case 'list': this.listStyle = 'list'
+    //       break
+    //   }
+    // }
   }
 }
 </script>

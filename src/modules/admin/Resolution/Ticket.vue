@@ -7,8 +7,8 @@
     <i class="fa fa-plus"></i>
     New Issue Ticket
   </button>
-  <basic-filter 
-      v-bind:category="category" 
+  <basic-filter
+      v-bind:category="category"
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
@@ -64,12 +64,12 @@ export default {
       category: [{
         title: 'Sort by',
         sorting: [{
-          title: 'Content ascending',
-          payload: 'content',
+          title: 'Title ascending',
+          payload: 'title',
           payload_value: 'asc'
         }, {
-          title: 'Content descending',
-          payload: 'content',
+          title: 'Title descending',
+          payload: 'title',
           payload_value: 'desc'
         }, {
           title: 'Status ascending',
@@ -140,9 +140,6 @@ export default {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
-        }else{
-          this.data = null
           this.numPages = null
         }
       })

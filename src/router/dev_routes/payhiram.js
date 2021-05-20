@@ -206,7 +206,7 @@ export default{
   }, {
     path: '/thread/:code?',
     name: 'thread',
-    component: resolve => require(['components/increment/messengervue/Payhiram.vue'], resolve),
+    component: resolve => require(['modules/messengervue/Payhiram.vue'], resolve),
     meta: {
       tokenRequired: true
     }

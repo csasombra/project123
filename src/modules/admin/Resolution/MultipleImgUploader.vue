@@ -13,16 +13,16 @@
       </div>
       <div class="d-flex flex-wrap">
         <input type="file" ref="file" name="attachment" @change="updateImg" style="display: none;">
-        <div class="d-flex justify-content-center align-items-center" id="selectImg" @click="imgCount < 11 && isEditable ? $refs.file.click() : ''">
+        <!-- <div class="d-flex justify-content-center align-items-center" id="selectImg" @click="imgCount < 11 && isEditable ? $refs.file.click() : ''">
           <i class="fas fa-plus" style="color:grey" v-if="imgCount < 11 && isEditable"></i>
           <p v-else-if="!isEditable" style="margin-top:15px;">View</p>
           <p v-else style="margin-top:15px;">Full</p>
-        </div>
+        </div> -->
         <div v-for="(img,index) in imageList" :key="index" id="selectImg">
           <img :src="img" :alt="img">
           <div class="overlay">
               <i class="fas fa-eye" id="icon" @click="previewImg = img"></i>
-              <i class="fas fa-trash" id="icon" v-if="isEditable" @click="deleteImg(index)"></i>
+              <!-- <i class="fas fa-trash" id="icon" v-if="isEditable" @click="deleteImg(index)"></i> -->
           </div>
         </div>
       </div>

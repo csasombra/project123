@@ -6,7 +6,7 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Assign</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true" class="text-white">&times;</span>
+                            <span aria-hidden="true" class="text-black">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
@@ -21,8 +21,8 @@
                                     <td>{{item.username}}</td>
                                     <td>{{item.account_type}}</td>
                                     <td>
-                                        <button class="btn btn-primary" v-if="item.id !== isAssigned" @click="setAssignee(item.id)">Assign</button>
-                                        <button class="btn btn-primary" v-if="item.id === isAssigned">Assigned</button>
+                                        <button class="btn btn-primary" v-if="item.username !== isAssigned" @click="setAssignee(item.username)">Assign</button>
+                                        <button class="btn btn-primary" v-if="item.username === isAssigned">Assigned</button>
                                     </td>
                                 </tr>
                             </tbody>
