@@ -15,12 +15,7 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
   <ticket-table :ticketData = "data"/>
-   <Pager
-      :pages="numPages"
-      :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
-    />
+    <button class="btn pull-right btn-primary" @click="seeMore(sort, filter)">See More</button>
     <messenger v-if="auth.messenger.data !== null"></messenger>
 </div>
 </template>
@@ -55,9 +50,12 @@ export default {
       data: [],
       user: AUTH.user,
       auth: AUTH,
-      limit: 5,
+      limit: 10,
       activePage: 0,
+      currentFilter: null,
+      currentSort: null,
       numPages: null,
+      offset: 0,
       statusType: '',
       sort: null,
       filter: null,
@@ -102,6 +100,42 @@ export default {
   methods: {
     createTicket() {
       ROUTER.push('/tickets/create/')
+    },
+    seeMore(sort, filter) {
+      this.offset += this.limit
+      if(filter !== null){
+        this.currentFilter = filter
+      }
+      if(sort !== null){
+        this.currentSort = sort
+      }
+      if(this.statusType.toUpperCase() === 'OPEN') {
+        this.statusType = this.statusType.toUpperCase()
+      }
+      let parameter = {
+        condition: [
+          {
+            value: filter.value + '%',
+            column: filter.column,
+            clause: 'like'
+          },
+          {
+            value: this.statusType,
+            column: 'status',
+            clause: '='
+          }],
+        sort: sort,
+        limit: this.limit,
+        offset: this.activePage
+      }
+      $('#loading').css({'display': 'block'})
+      this.APIRequest('tickets/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.data = response.data
+          this.numPages = null
+        }
+      })
     },
     retrieve(sort, filter) {
       if(sort !== null){

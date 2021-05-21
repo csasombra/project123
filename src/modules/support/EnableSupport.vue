@@ -36,12 +36,7 @@
         </tr>
       </tbody>
     </table>
-    <Pager
-      :pages="numPages"
-      :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
-    />
+    <button class="btn pull-right btn-primary" @click="seeMore(sort, filter)">See More</button>
     <Confirmation
     ref="confirm"
     :title="'Confirmation'"
@@ -154,6 +149,9 @@ export default{
       activePage: 1,
       numPages: null,
       limit: 5,
+      offset: 0,
+      sort: null,
+      filter: null,
       a: null
     }
   },
@@ -169,6 +167,36 @@ export default{
     redirect(params){
       ROUTER.push(params)
     },
+    seeMore(sort, filter) {
+      this.offset += this.limit
+      if(filter !== null){
+        this.currentFilter = filter
+      }
+      if(sort !== null){
+        this.currentSort = sort
+      }
+      let parameter = {
+        condition: [{
+          column: this.currentFilter.column,
+          clause: 'like',
+          value: '%' + this.currentFilter.value + '%'
+        }],
+        sort: sort,
+        limit: this.limit,
+        offset: this.activePage
+      }
+      $('#loading').css({'display': 'block'})
+      this.APIRequest('enable_supports/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit) ? 1 : 0
+        }else{
+          this.data = null
+          this.numPages = null
+        }
+      })
+    },
     retrieve(sort, filter){
       if(sort !== null){
         this.currentSort = sort
@@ -182,14 +210,13 @@ export default{
           clause: 'like',
           value: '%' + this.currentFilter.value + '%'
         }],
-        sort: this.currentSort,
+        sort: sort,
         limit: this.limit,
-        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+        offset: this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('enable_supports/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        console.log('[Enable Supports]', response.data)
         if(response.data.length > 0){
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit) ? 1 : 0

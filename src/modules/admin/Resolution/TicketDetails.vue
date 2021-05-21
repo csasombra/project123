@@ -22,7 +22,7 @@
         <span><b>Image attachments</b></span><br>
 
         <multiple-img-uploader  v-if="data.length !== 0" :imageList="imageList" :isEditableProp="editable"/>
-        <!-- <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button> -->
+        <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button>
 
       </form>
     </div>
@@ -32,7 +32,7 @@
       <hr>
       <span>Assignee</span>
       <br>
-      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ assignee ? assignee : 'Add assignee resolver'}}</u></b></p>
+      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ data.assigned != null ? assignTo.username : assignee ? assignee : 'Add assignee resolver'}}</u></b></p>
       <assignees ref="assign"></assignees>
       <hr>
       <span>Status</span>
@@ -78,6 +78,7 @@ export default {
         image: null
       },
       assignee: null,
+      assigned: null,
       options: [
         {
           name: 'open'
@@ -102,18 +103,12 @@ export default {
       this.$refs.assign.retrieveAssignees()
     },
     update() {
-      let images = this.imageList.join(' ')
       let parameter = {
-        id: this.$route.params.id,
-        title: this.title,
-        content: this.title,
-        images: images,
-        assigned_to: this.assignee,
-        status: this.data.status
+        ticket_id: this.$route.params.id,
+        assigned_to: this.assigned
       }
-      // console.log(parameter.status, 'oo')
       $('#loading').css({display: 'block'})
-      this.APIRequest('tickets/update', parameter).then(response => {
+      this.APIRequest('tickets/update_assign', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data === true) {
           this.retrieveItem(this.$route.params.id)
@@ -133,7 +128,6 @@ export default {
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('tickets/retrieve', parameter).then(response => {
-        console.log('[response]', response)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data[0]

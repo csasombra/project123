@@ -213,7 +213,6 @@ export default{
     },
     seeMore(){
       this.limit = this.limit + 5
-      console.log(this.limit)
       this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
     },
     retrieve(sort, filter){

@@ -21,7 +21,7 @@
                                     <td>{{item.username}}</td>
                                     <td>{{item.account_type}}</td>
                                     <td>
-                                        <button class="btn btn-primary" v-if="item.username !== isAssigned" @click="setAssignee(item.username)">Assign</button>
+                                        <button class="btn btn-primary" v-if="item.username !== isAssigned" @click="setAssignee(item.id, item.username)">Assign</button>
                                         <button class="btn btn-primary" v-if="item.username === isAssigned">Assigned</button>
                                     </td>
                                 </tr>
@@ -67,10 +67,11 @@ export default {
         }
       })
     },
-    setAssignee(id){
-      console.log(this.isAssigned, id)
+    setAssignee(id, username){
+      console.log(this.isAssigned, id, username)
       this.isAssigned = id
-      this.$parent.assignee = id
+      this.$parent.assigned = id
+      this.$parent.assignee = username
     }
   }
 }
