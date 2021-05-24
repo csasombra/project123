@@ -75,14 +75,14 @@ export default {
 
       firebase.messaging.onMessage((payload) => {
         console.log('notification ', payload)
-        switch(payload.data.topic.toLowerCase()) {
-          case 'acceptorder':
-            USER.setNotificationOrders(payload)
-            break
-          case 'crockery':
-            USER.setNotificationCrockery(payload)
-            break
-        }
+        // switch(payload.data.topic.toLowerCase()) {
+        //   case 'acceptorder':
+        //     USER.setNotificationOrders(payload)
+        //     break
+        //   case 'crockery':
+        //     USER.setNotificationCrockery(payload)
+        //     break
+        // }
         this.$emit('new-message', payload)
       })
     }

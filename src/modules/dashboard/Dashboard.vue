@@ -7,6 +7,10 @@
       <label style="margin-top: 15px;"><b>Ledger Summary</b></label>
       <summary-ledger :data="data.history"></summary-ledger>
     </div>
+    <PushNotification
+      ref="pushNotification"
+      id="pushNotification"
+      @new-message="onNewMessage"/>
   </div>
 </template>
 <style scoped>
@@ -112,6 +116,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Scanner from 'modules/request/Scanner.vue'
+import PushNotification from 'src/components/notification/pushNotification.vue'
 export default{
   mounted(){
     // this.retrieve()
@@ -122,13 +127,33 @@ export default{
       user: AUTH.user,
       data: null
     }
-
   },
   components: {
     'ledgers': require('modules/dashboard/Ledger.vue'),
-    'summary-ledger': require('modules/dashboard/Summary.vue')
+    'summary-ledger': require('modules/dashboard/Summary.vue'),
+    PushNotification
   },
   methods: {
+    onNewMessage(message) {
+      console.log('mes', message)
+      // if(AUTH.notification.type === 'order') {
+      //   this.isNewMessage = true
+      //   this.retrieveNotification()
+      //   this.APIGetRequest(`orders/${message.data.orderId}`, async response => {
+      //     this.reRenderTable = await true
+      //     await this.data.push(response.orders[0])
+      //     await this.selectData(this.selectedDataIndex, 0)
+      //     await response.orders.order_items.map(each => {
+      //       if(each.product.category_type === 1){
+      //         this.deliStore.push(each)
+      //       }else{
+      //         this.restaurant.push(each)
+      //       }
+      //     })
+      //     this.reRender = await true
+      //   })
+      // }
+    },
     redirect(parameter){
       ROUTER.push(parameter)
     },
