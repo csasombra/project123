@@ -2,12 +2,12 @@
   <div class="ledger-summary-container" style="margin-top: 5%">
     <div class="incre-row">
     </div>
-    <basic-filter 
-      v-bind:category="category" 
+    <filter-product v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
-      :grid="['list', 'th-large']"></basic-filter>
+      :grid="['list']">
+    </filter-product>
     <table class="table table-bordered table-responsive"  v-if="data != null">
       <thead>
         <td>Date</td>
@@ -118,66 +118,74 @@ export default{
       limit: 5,
       numPages: null,
       activePage: 0,
-      offset: 0,
       category: [{
         title: 'Sort by',
         sorting: [{
           title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'date'
         }, {
           title: 'Date posted descending',
           payload: 'created_at',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'date'
         }, {
           title: 'Amount ascending',
           payload: 'amount',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'number'
         }, {
           title: 'Amount descending',
           payload: 'amount',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'number'
         }, {
           title: 'Description ascending',
           payload: 'description',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Description descending',
           payload: 'description',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
           title: 'Sender ascending',
           payload: 'owner.username',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Sender descending',
           payload: 'owner.username',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
           title: 'Receiver ascending',
           payload: 'receiver.username',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Receiver descending',
           payload: 'receiver.username',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }]
       }],
-      filter: null,
-      sort: null
+      currentFilter: null,
+      currentSort: null,
+      offset: 0,
+      sort: null,
+      filter: null
     }
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'basic-filter': require('components/increment/generic/filter/Basic.vue')
+    'filter-product': require('modules/filter/filterHeader.vue')
   },
   methods: {
     redirect(params){
       ROUTER.push(params)
-    },
-    seeMore() {
-      this.limit = this.limit + 5
-      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
     },
     pagination(flag){
       if(flag === false && this.offset > 5){
@@ -189,27 +197,24 @@ export default{
       }
     },
     retrieve(sort, filter){
-      if(sort !== null){
-        this.sort = sort
-      }
+      this.sort = sort
+      this.filter = filter
+      this.offset = 0
       if(filter !== null){
-        this.filter = filter
+        this.currentFilter = filter
       }
-      if(sort === null && this.sort !== null){
-        sort = this.sort
-      }
-      if(filter === null && this.filter !== null){
-        filter = this.filter
+      if(sort !== null){
+        this.currentSort = sort
       }
       let parameter = {
         condition: [{
-          column: filter.column,
-          value: filter.value + '%',
+          value: '%' + this.currentFilter.value + '%',
+          column: this.currentFilter.column,
           clause: 'like'
         }],
-        sort: sort,
+        sort: this.currentSort,
         limit: this.limit,
-        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+        offset: this.offset
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('ledger/transaction_history', parameter).then(response => {

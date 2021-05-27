@@ -499,7 +499,6 @@ export default{
       //   filter.column = 'account_id'
       //   filter.value = this.user.userID
       // }
-      console.log('personal ', this.isPersonal)
       if(sort !== null){
         this.sort = sort
       }
@@ -549,7 +548,7 @@ export default{
           AUTH.user.ledger.amount = response.ledger
           $('#loading').css({display: 'none'})
           console.log('test: ', response)
-          if(response.data !== null){
+          if(response.data.length > 0){
             this.data = response.data
             this.size = parseInt(response.size)
             this.locations = response.locations ? response.locations : null
