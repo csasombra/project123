@@ -142,11 +142,6 @@
     <increment-modal :property="requestModal"></increment-modal>
     <show-image-modal ref="showImage"></show-image-modal>
     <show-process-modal  ref="createChargesModal"></show-process-modal>
-    <PushNotification
-      ref="pushNotification"
-      :currentToken="userToken"
-      @update-token="onUpdateToken"
-      @new-message="onNewMessage" />
   </div>
 </template>
 <style scoped lang="scss">
@@ -320,24 +315,9 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import REQUEST from '../modal/CreateRequest.js'
-import PushNotification from '../../components/notification/pushNotification'
 import api from '../../services/api'
 export default{
-  created() {
-    var userLoggedId = 1
-    // check if user has a token
-    api.user_profile(userLoggedId).then((response) => {
-      this.userProfile = response.data
-      this.userToken = this.userProfile.push_notification.ask_for_permission.token
-      if (this.userProfile.push_notification.ask_for_permission) {
-        setTimeout(() => {
-          // Simulate it wont ask for permission in the first user access
-          this.askForPermission = true
-        }, 4000)
-        this.enableNotifications()
-      }
-    })
-  },
+  created() {},
   mounted(){
     if(this.$route.params.code){
       setTimeout(() => {
@@ -435,8 +415,7 @@ export default{
     'empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     'show-image-modal': require('components/increment/generic/modal/Image.vue'),
-    'show-process-modal': require('modules/request/ProcessModal.vue'),
-    PushNotification
+    'show-process-modal': require('modules/request/ProcessModal.vue')
   },
   methods: {
     redirect(parameter){
@@ -612,32 +591,6 @@ export default{
           $('#loading').css({display: 'none'})
         }
       })
-    },
-    enableNotifications () {
-      this.$refs.pushNotification.askForPermission()
-    },
-    onUpdateToken (newToken) {
-      this.userToken = newToken
-      // send token to the server
-      api.update_token(this.userProfile, this.userToken)
-    },
-    onNewMessage (message) {
-      /**
-       * Every messages which is fired by firebase is receive here
-       */
-      if (message.data.topic !== undefined || message.data.topic !== null) {
-        switch(message.data.topic.toLowerCase()) {
-          case 'acceptorder':
-            this.notificationTitle = 'NEW ORDER REQUEST'
-            break
-          case 'crockery':
-            this.notificationTitle = 'NEW CROCKERY REQUEST'
-            break
-        }
-        if(message.data.topic.toLowerCase() === 'acceptorder' || message.data.topic.toLowerCase() === 'crockery'){
-          this.notificationMessage.push(message.notification.body)
-        }
-      }
     }
   }
 }

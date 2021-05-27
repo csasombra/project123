@@ -7,6 +7,11 @@
       <label style="margin-top: 15px;"><b>Ledger Summary</b></label>
       <summary-ledger :data="data.history"></summary-ledger>
     </div>
+    <PushNotification
+      ref="pushNotification"
+      id="pushNotification"
+      @new-message="onNewMessage" 
+    />
   </div>
 </template>
 <style scoped>
@@ -110,12 +115,10 @@
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
-export default{
-  mounted(){
-    // this.retrieve()
-    this.retrieve({column: 'created_at', value: 'desc'}, {column: 'created_at', value: ''})
-  },
+import PushNotification from 'components/notification/pushNotification'
+export default {
   components: {
+    PushNotification,
     'ledgers': require('modules/dashboard/Ledger.vue'),
     'summary-ledger': require('modules/dashboard/Summary.vue')
   },
@@ -125,7 +128,14 @@ export default{
       data: null
     }
   },
+  mounted(){
+    this.retrieve()
+    this.retrieve({column: 'created_at', value: 'desc'}, {column: 'created_at', value: ''})
+  },
   methods: {
+    onNewMessage(message) {
+      console.log(':message received: ', message)
+    },
     redirect(parameter){
       ROUTER.push(parameter)
     },
@@ -145,6 +155,7 @@ export default{
             this.data = null
             AUTH.user.ledger.amount = null
           }
+          this.$refs['pushNotification'].askForPermission()
         })
       }, 1000)
     }
