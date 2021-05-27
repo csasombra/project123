@@ -72,7 +72,7 @@ export default {
           })
 
           messaging.onMessage((payload) => {
-            console.log('payload', payload)
+            console.log('----:new message:---- ', payload)
             // this.$emit('new-message', payload)
             if (payload.data.topic !== undefined && payload.data.topic !== null && payload.data.topic !== '' ) {
               switch(payload.data.topic.replace(/-[0-9]/, '').toLowerCase()) {

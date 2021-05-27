@@ -1,7 +1,7 @@
 {
     "name": "payhiram",
-    "short_name": "mts",
-    // "gcm_sender_id": "1062131230146",
+    "short_name": "payhiram",
+    "gcm_sender_id": "1062131230146",
     "start_url": "/",
     "display": "fullscreen"
   }
