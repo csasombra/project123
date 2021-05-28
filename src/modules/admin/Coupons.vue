@@ -11,6 +11,13 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
 
+      <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="data !== null"
+      />
+
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
@@ -51,7 +58,7 @@
     @onConfirm="remove($event)"
     >
     </Confirmation>
-    <button class="btn pull-right btn-primary" @click="seeMore()">See More</button>
+    <!-- <button class="btn pull-right btn-primary" @click="seeMore()">See More</button> -->
     <!-- <Pager
       :pages="numPages"
       :active="activePage"
@@ -194,7 +201,7 @@ export default{
       }],
       currentFilter: null,
       currentSort: null,
-      activePage: 0,
+      activePage: 1,
       numPages: null,
       limit: 5
     }
@@ -230,7 +237,7 @@ export default{
         }],
         sort: this.currentSort,
         limit: this.limit,
-        offset: this.activePage
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('coupons/retrieve', parameter).then(response => {
