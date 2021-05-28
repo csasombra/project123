@@ -2,13 +2,21 @@
   <div class="ledger-summary-container" style="margin-top: 5%">
     <div class="incre-row">
     </div>
-    <filter-product v-bind:category="category" 
+    <basic-filter 
+      v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
-      :grid="['list']">
-    </filter-product>
-    <table class="table table-bordered table-responsive"  v-if="data != null">
+      :grid="['list', 'th-large']"></basic-filter>
+
+      <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="data.length > 0"
+      />
+    <!-- {{data}} -->
+    <table class="table table-bordered table-responsive"  v-if="data.length > 0">
       <thead>
         <td>Date</td>
         <td>Transaction Code</td>
@@ -22,17 +30,13 @@
           <td>{{item.created_at_human}}</td>
           <td>*****{{item.code.substring(56)}}</td>
           <td>{{item.owner.username}}</td>
-          <td>{{item.receiver.username}}</td>
+          <td>{{item.receiver !== null ? item.receiver.username : NULL}}</td>
           <td v-if="item.amount > 0" class="text-primary"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td v-else class="text-danger"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td>{{item.description}}</td>
         </tr>
       </tbody>
     </table>
-    <div>
-      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
-      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
-    </div>
     <empty v-if="data === null" :title="'No Transactions yet!'" :action="'Keep growing.'"></empty>
   </div>
 </template>
@@ -113,79 +117,72 @@ export default{
   data(){
     return {
       user: AUTH.user,
-      data: null,
+      data: [],
       auth: AUTH,
       limit: 5,
       numPages: null,
-      activePage: 0,
+      activePage: 1,
+      offset: 0,
       category: [{
         title: 'Sort by',
         sorting: [{
           title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'asc',
-          type: 'date'
+          payload_value: 'asc'
         }, {
           title: 'Date posted descending',
           payload: 'created_at',
-          payload_value: 'desc',
-          type: 'date'
+          payload_value: 'desc'
         }, {
           title: 'Amount ascending',
           payload: 'amount',
-          payload_value: 'asc',
-          type: 'number'
+          payload_value: 'asc'
         }, {
           title: 'Amount descending',
           payload: 'amount',
-          payload_value: 'desc',
-          type: 'number'
+          payload_value: 'desc'
         }, {
           title: 'Description ascending',
           payload: 'description',
-          payload_value: 'asc',
-          type: 'text'
+          payload_value: 'asc'
         }, {
           title: 'Description descending',
           payload: 'description',
-          payload_value: 'desc',
-          type: 'text'
+          payload_value: 'desc'
         }, {
           title: 'Sender ascending',
           payload: 'owner.username',
-          payload_value: 'asc',
-          type: 'text'
+          payload_value: 'asc'
         }, {
           title: 'Sender descending',
           payload: 'owner.username',
-          payload_value: 'desc',
-          type: 'text'
+          payload_value: 'desc'
         }, {
           title: 'Receiver ascending',
           payload: 'receiver.username',
-          payload_value: 'asc',
-          type: 'text'
+          payload_value: 'asc'
         }, {
           title: 'Receiver descending',
           payload: 'receiver.username',
-          payload_value: 'desc',
-          type: 'text'
+          payload_value: 'desc'
         }]
       }],
-      currentFilter: null,
-      currentSort: null,
-      offset: 0,
-      sort: null,
-      filter: null
+      filter: null,
+      sort: null
     }
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'filter-product': require('modules/filter/filterHeader.vue')
+    'basic-filter': require('components/increment/generic/filter/Basic.vue'),
+    Pager
   },
   methods: {
     redirect(params){
       ROUTER.push(params)
+    },
+    seeMore() {
+      this.limit = this.limit + 5
+      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
     },
     pagination(flag){
       if(flag === false && this.offset > 5){
@@ -197,33 +194,36 @@ export default{
       }
     },
     retrieve(sort, filter){
-      this.sort = sort
-      this.filter = filter
-      this.offset = 0
-      if(filter !== null){
-        this.currentFilter = filter
-      }
       if(sort !== null){
-        this.currentSort = sort
+        this.sort = sort
+      }
+      if(filter !== null){
+        this.filter = filter
+      }
+      if(sort === null && this.sort !== null){
+        sort = this.sort
+      }
+      if(filter === null && this.filter !== null){
+        filter = this.filter
       }
       let parameter = {
         condition: [{
-          value: '%' + this.currentFilter.value + '%',
-          column: this.currentFilter.column,
+          column: filter.column,
+          value: filter.value + '%',
           clause: 'like'
         }],
-        sort: this.currentSort,
+        sort: sort,
         limit: this.limit,
-        offset: this.offset
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('ledger/transaction_history', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        if(response != null){
+        if(response.data.length > 0){
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
-          this.data = null
+          this.data = []
         }
         // if(response.data.length > 0){
         //   this.data = response
