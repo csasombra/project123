@@ -11,6 +11,13 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
     
+     <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="data !== null"
+      />
+
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
         <tr>
@@ -99,6 +106,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import CURRENCY from 'src/services/currency.js'
+import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import deliveryCharges from 'src/modules/admin/CreateDeliveryCharges.js'
 export default{
@@ -116,6 +124,9 @@ export default{
         file: null
       },
       config: CONFIG,
+      limit: 5,
+      numPages: null,
+      activePage: 1,
       deliveryModal: deliveryCharges,
       category: [{
         title: 'Sort by',
@@ -167,7 +178,8 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Confirmation
+    Confirmation,
+    Pager
   },
   methods: {
     redirect(params){
@@ -180,14 +192,18 @@ export default{
           clause: 'like',
           value: filter.value + '%'
         }],
-        sort: sort
+        sort: sort,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       this.APIRequest('delivery_fees/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
+          this.numPages = null
         }
       })
     },
@@ -195,15 +211,19 @@ export default{
       let parameter = {
         sort: {
           created_at: 'desc'
-        }
+        },
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('delivery_fees/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = null
+          this.numPages = null
         }
       })
     },

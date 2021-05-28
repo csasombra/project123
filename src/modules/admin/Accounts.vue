@@ -10,6 +10,13 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
 
+      <Pager
+      :pages="numPages"
+      :active="activePage"
+      :limit="limit"
+      v-if="data.length > 0"
+    />
+    
       <div class="incre-row">
         <ul class="nav nav-tabs nav-justified" style="line-height: 40px;">
           <li class="nav-item">
@@ -118,10 +125,10 @@
     <empty v-if="data.length <= 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <profile :item="selecteditem"></profile>
     <increment-modal :property="scopeLocation"></increment-modal>
-    <div>
+    <!-- <div>
       <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
       <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
-    </div>
+    </div> -->
   </div>
 </template>
 <style scoped>
@@ -263,7 +270,8 @@ export default{
       editTypeIndex: null,
       newAccountType: null,
       selectedAccount: null,
-      activeItem: 'home'
+      activeItem: 'home',
+      activePage: 1
     }
   },
   components: {
@@ -335,7 +343,7 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: this.offset
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       if(this.activeItem !== 'home'){
         parameter['accountType'] = this.activeItem
@@ -383,11 +391,12 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: this.offset
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       if(this.activeItem !== 'home'){
         parameter['accountType'] = this.activeItem
       }
+      $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve_accounts', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
