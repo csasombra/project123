@@ -21,7 +21,6 @@ export default {
   },
   methods: {
     initialize () {
-      console.log('initialize')
       if (!('serviceWorker' in navigator)) {
         console.warn('serviceWorker not working')
         return
@@ -74,13 +73,12 @@ export default {
           messaging.onMessage((payload) => {
             console.log('----:new message:---- ', payload)
             // this.$emit('new-message', payload)
-            if (payload.data.topic !== undefined && payload.data.topic !== null && payload.data.topic !== '' ) {
-              switch(payload.data.topic.replace(/-[0-9]/, '').toLowerCase()) {
-                case 'request':
-                  console.log('request')
+            if (payload.data.payload !== undefined && payload.data.payload !== null && payload.data.payload !== '' ) {
+              switch(payload.data.payload.toLowerCase()) {
+                case 'requests':
+                  console.log('requests')
                   break
               }
-              console.log('<new message> ', payload)
             }
           })
 

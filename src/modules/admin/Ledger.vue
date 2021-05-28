@@ -122,6 +122,7 @@ export default{
       limit: 5,
       numPages: null,
       activePage: 1,
+      offset: 0,
       category: [{
         title: 'Sort by',
         sorting: [{
@@ -223,7 +224,6 @@ export default{
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = []
-          this.numPages = null
         }
         // if(response.data.length > 0){
         //   this.data = response
