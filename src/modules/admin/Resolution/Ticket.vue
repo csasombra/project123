@@ -14,8 +14,15 @@
       @changeSortEvent="retrieve($event.sort, $event.filter)"
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
+
+  <Pager
+    :pages="numPages"
+    :active="activePage"
+    :limit="limit"
+    v-if="data.length > 0"
+  />
+
   <ticket-table :ticketData = "data"/>
-    <button class="btn pull-right btn-primary" @click="seeMore(sort, filter)">See More</button>
     <messenger v-if="auth.messenger.data !== null"></messenger>
 </div>
 </template>
@@ -50,7 +57,7 @@ export default {
       data: [],
       user: AUTH.user,
       auth: AUTH,
-      limit: 10,
+      limit: 5,
       activePage: 0,
       currentFilter: null,
       currentSort: null,
@@ -101,43 +108,8 @@ export default {
     createTicket() {
       ROUTER.push('/tickets/create/')
     },
-    seeMore(sort, filter) {
-      this.offset += this.limit
-      if(filter !== null){
-        this.currentFilter = filter
-      }
-      if(sort !== null){
-        this.currentSort = sort
-      }
-      if(this.statusType.toUpperCase() === 'OPEN') {
-        this.statusType = this.statusType.toUpperCase()
-      }
-      let parameter = {
-        condition: [
-          {
-            value: filter.value + '%',
-            column: filter.column,
-            clause: 'like'
-          },
-          {
-            value: this.statusType,
-            column: 'status',
-            clause: '='
-          }],
-        sort: sort,
-        limit: this.limit,
-        offset: this.activePage
-      }
-      $('#loading').css({'display': 'block'})
-      this.APIRequest('tickets/retrieve', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          this.data = response.data
-          this.numPages = null
-        }
-      })
-    },
     retrieve(sort, filter) {
+      console.log('df', this.statusType)
       if(sort !== null){
         this.sort = sort
       }
@@ -167,14 +139,14 @@ export default {
           }],
         sort: sort,
         limit: this.limit,
-        offset: this.activePage
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('tickets/retrieve', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
-          this.numPages = null
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }
       })
     }

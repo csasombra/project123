@@ -115,13 +115,6 @@
       <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button> -->
     </div>
 
-     <!-- <Pager
-      :pages="numPages"
-      :active="offset"
-      :limit="limit"
-      v-if="data !== null"
-    /> -->
-
     <empty v-if="data.length <= 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <profile :item="selecteditem"></profile>
     <increment-modal :property="scopeLocation"></increment-modal>
