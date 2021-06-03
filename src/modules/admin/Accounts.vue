@@ -23,6 +23,9 @@
             <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User w/ Image</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" @click.prevent="setActive('PARTNER')" :class="{ active: isActive('partner') }" href="#partner">Partner</a>
           </li>
           <li class="nav-item">
@@ -44,6 +47,7 @@
       </div>
         <div class="tab-content py-3" id="myTabContent">
           <div class="tab-pane fade" :class="{ 'active show': isActive('user') }" id="user">User content</div>
+          <div class="tab-pane fade" :class="{ 'active show': isActive('user') }" id="user">User With Image</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('partner') }" id="partner">Partner content</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('accountant') }" id="accountant">Accountant content</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('marketing') }" id="marketing">Marketing content</div>
@@ -313,46 +317,6 @@ export default{
     },
     redirect(params){
       ROUTER.push(params)
-    },
-    seeMore(sort, filter) {
-      this.offset += this.limit
-      if(sort !== null){
-        this.sort = sort
-      }
-      if(filter !== null){
-        this.filter = filter
-      }
-      if(sort === null && this.sort !== null){
-        sort = this.sort
-      }
-      if(filter === null && this.filter !== null){
-        filter = this.filter
-      }
-      let parameter = {
-        condition: [{
-          value: filter.value + '%',
-          column: filter.column,
-          clause: 'like'
-        }],
-        sort: sort,
-        limit: this.limit,
-        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
-      }
-      if(this.activeItem !== 'home'){
-        parameter['accountType'] = this.activeItem
-      }
-      this.APIRequest('accounts/retrieve_accounts', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          response.data.forEach(element => {
-            this.data.push(element)
-          })
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
-        }else{
-          this.data = []
-          this.numPages = null
-        }
-      })
     },
     pagination(flag){
       if(flag === false && this.offset > 5){

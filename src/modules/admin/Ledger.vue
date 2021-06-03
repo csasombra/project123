@@ -180,19 +180,6 @@ export default{
     redirect(params){
       ROUTER.push(params)
     },
-    seeMore() {
-      this.limit = this.limit + 5
-      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-    },
-    pagination(flag){
-      if(flag === false && this.offset > 5){
-        this.offset = this.offset - 5
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      }else{
-        this.offset = this.offset + 5
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      }
-    },
     retrieve(sort, filter){
       if(sort !== null){
         this.sort = sort
