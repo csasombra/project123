@@ -20,8 +20,8 @@
       <thead>
         <td>Date</td>
         <td>Transaction Code</td>
-        <td>Sender's Code</td>
-        <td>Receiver's Code</td>
+        <td>Sender</td>
+        <td>Receiver</td>
         <td>Amount</td>
         <td>Description</td>
       </thead>

@@ -23,7 +23,7 @@
             <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User w/ Image</a>
+            <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('userImage') }" href="#userImage">User w/ Image</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" @click.prevent="setActive('PARTNER')" :class="{ active: isActive('partner') }" href="#partner">Partner</a>
@@ -47,7 +47,7 @@
       </div>
         <div class="tab-content py-3" id="myTabContent">
           <div class="tab-pane fade" :class="{ 'active show': isActive('user') }" id="user">User content</div>
-          <div class="tab-pane fade" :class="{ 'active show': isActive('user') }" id="user">User With Image</div>
+          <div class="tab-pane fade" :class="{ 'active show': isActive('userImage') }" id="userImage">User With Image</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('partner') }" id="partner">Partner content</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('accountant') }" id="accountant">Accountant content</div>
           <div class="tab-pane fade" :class="{ 'active show': isActive('marketing') }" id="marketing">Marketing content</div>
