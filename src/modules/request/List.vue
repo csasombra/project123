@@ -48,17 +48,18 @@
           <label class="pull-right">
             <div class="dropdown" id="dropdownMenuButtonDropdown">
               <ratings :ratings="item.rating" v-if="item.rating !== null"></ratings>
-              <i v-if="parseInt(item.account_id) !== user.userID" class="fas fa-ellipsis-h text-gray more-options ml-3" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="dropdownMenuButtonDropdown" style="padding-top: 10px;">
-              </i>
-              <div class="dropdown-menu dropdown-more-options" aria-labelledby="dropdownMenuButton" >
+              <!-- <i v-if="parseInt(item.account_id) !== user.userID" class="fas fa-ellipsis-h text-gray more-options ml-3" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="dropdownMenuButtonDropdown" style="padding-top: 10px;">
+              </i> -->
+              <!-- <div class="dropdown-menu dropdown-more-options" aria-labelledby="dropdownMenuButton" > -->
                 <!-- <span class="dropdown-item action-link" @click="showRequestModal('update', item)" v-if="parseInt(item.account_id) === user.userID || (item.comakers !== null && user.userID === parseInt(item.comakers[0].comaker))">Edit</span> -->
-                <span class="dropdown-item action-link" @click="showReportModal(item)">Report</span>
-              </div>
+                <!-- <span class="dropdown-item action-link" @click="showReportModal(item)">Report</span>
+              </div> -->
             </div>
           </label>
         </span>
         <label class="text-uppercase request">
-          {{auth.showRequestType(item.type) + ' - ' + item.money_type}}
+          {{auth.showRequestType(item.type) + ' - ' + item.shipping}} 
+          <!-- {{auth.showRequestType(item.type) + ' - ' + item.money_type}} -->
         </label>
         <p class="float-right request">
             <b class="amount">{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b>
@@ -94,15 +95,15 @@
         <small class="body mt-2">
             {{item.created_at_human}}
         </small>
-        <span>
+        <!-- <span>
           <div v-if="parseInt(item.account_id) !== user.userID">
             <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showInvestmentModal(item)" v-if="parseInt(item.type) > 100 && user.type !== 'USER' && isProposal">Send Proposal</button>
-            <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showChargeModal(item)" v-if="parseInt(item.type) < 101 && user.type !== 'USER' && isProposal">Send Proposal</button>
+            <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showChargeModal(item)" v-if="parseInt(item.type) < 101 && user.type !== 'USER' && isProposal">Send Proposal</button> -->
             <!-- <button class="btn btn-warning" style="margin-right: 5px;" @click="bookmark(item.id)">
               <i class="fas fa-star" v-if="item.bookmark === true"></i>
               Bookmark</button> -->
-          </div>
-        </span>
+          <!-- </div>
+        </span> -->
         
         <label class="mt-3" v-if="parseInt(item.invested) > 0 && parseInt(item.amount) > 0">Percentage of amount invested</label>
         <b-progress :max="parseInt(item.initial_amount)" class="progress-bar bg-warning"  style="margin-bottom: 10px;" v-if="parseInt(item.invested) > 0 && parseInt(item.amount) > 0">
