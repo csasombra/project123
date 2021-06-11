@@ -23,7 +23,7 @@
             <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('user') }" href="#user">User</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" @click.prevent="setActive('USER')" :class="{ active: isActive('userImage') }" href="#userImage">User w/ Image</a>
+            <a class="nav-link" @click.prevent="setActive('USERIMAGE')" :class="{ active: isActive('userImage') }" href="#userImage">User w/ Image</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" @click.prevent="setActive('PARTNER')" :class="{ active: isActive('partner') }" href="#partner">Partner</a>
@@ -268,7 +268,8 @@ export default{
       newAccountType: null,
       selectedAccount: null,
       activeItem: 'home',
-      activePage: 1
+      activePage: 1,
+      userCard: []
     }
   },
   components: {
@@ -351,13 +352,30 @@ export default{
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       if(this.activeItem !== 'home'){
-        parameter['accountType'] = this.activeItem
+        if(this.activeItem === 'USERIMAGE'){
+          parameter['accountType'] = 'USER'
+        }else{
+          parameter['accountType'] = this.activeItem
+        }
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve_accounts', parameter).then(response => {
+        console.log('here', response)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
-          this.data = response.data
+          if(this.activeItem === 'USERIMAGE'){
+            this.data = response.data.filter(function(e){
+              console.log('[e]', e.card)
+              return e.card.length > 0
+            })
+            // response.data.map(el => {
+            //   if(el.card != null || el.card.length > 0){
+            //     this.data = el.card
+            //   }
+            // })
+          }else{
+            this.data = response.data
+          }
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
           this.data = []
@@ -475,11 +493,12 @@ export default{
       })
     },
     isActive (menuItem) {
+      console.log('active', menuItem)
       return this.activeItem === menuItem
     },
     setActive (menuItem) {
       this.activeItem = menuItem
-      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''}, this.activeItem)
     }
   }
 }
