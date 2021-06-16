@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="row roa">
+  <div class="incre-row">
+    <div class="row" style="display: flex; justify-content: space-between; margin-top: 25px;">
       <div class="col-3">
         <div class="card card1">
           <div class="card-body row" style="color: white">
@@ -81,10 +81,8 @@ p{
   text-align: center;
 }
 .card{
-  border-radius: 25px;
-  width: 80%;
-  height: 95%;
-  border-bottom-color: $primary !important;
+  border-radius: 5px;
+  width: 100%;
 }
 .roa{
   margin-top: 20px
@@ -100,6 +98,12 @@ p{
 }
 .card2{
   background-color: #6ed1ff;
+}
+
+.incre-row{
+  width: 90%;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 </style>
 <script>
