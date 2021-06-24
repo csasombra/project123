@@ -48,17 +48,18 @@
           <label class="pull-right">
             <div class="dropdown" id="dropdownMenuButtonDropdown">
               <ratings :ratings="item.rating" v-if="item.rating !== null"></ratings>
-              <i v-if="parseInt(item.account_id) !== user.userID" class="fas fa-ellipsis-h text-gray more-options ml-3" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="dropdownMenuButtonDropdown" style="padding-top: 10px;">
-              </i>
-              <div class="dropdown-menu dropdown-more-options" aria-labelledby="dropdownMenuButton" >
+              <!-- <i v-if="parseInt(item.account_id) !== user.userID" class="fas fa-ellipsis-h text-gray more-options ml-3" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-target="dropdownMenuButtonDropdown" style="padding-top: 10px;">
+              </i> -->
+              <!-- <div class="dropdown-menu dropdown-more-options" aria-labelledby="dropdownMenuButton" > -->
                 <!-- <span class="dropdown-item action-link" @click="showRequestModal('update', item)" v-if="parseInt(item.account_id) === user.userID || (item.comakers !== null && user.userID === parseInt(item.comakers[0].comaker))">Edit</span> -->
-                <span class="dropdown-item action-link" @click="showReportModal(item)">Report</span>
-              </div>
+                <!-- <span class="dropdown-item action-link" @click="showReportModal(item)">Report</span>
+              </div> -->
             </div>
           </label>
         </span>
         <label class="text-uppercase request">
-          {{auth.showRequestType(item.type) + ' - ' + item.money_type}}
+          {{auth.showRequestType(item.type) + ' - ' + item.shipping}} 
+          <!-- {{auth.showRequestType(item.type) + ' - ' + item.money_type}} -->
         </label>
         <p class="float-right request">
             <b class="amount">{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b>
@@ -94,15 +95,15 @@
         <small class="body mt-2">
             {{item.created_at_human}}
         </small>
-        <span>
+        <!-- <span>
           <div v-if="parseInt(item.account_id) !== user.userID">
             <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showInvestmentModal(item)" v-if="parseInt(item.type) > 100 && user.type !== 'USER' && isProposal">Send Proposal</button>
-            <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showChargeModal(item)" v-if="parseInt(item.type) < 101 && user.type !== 'USER' && isProposal">Send Proposal</button>
+            <button class="btn btn-secondary send" style="margin-right: 5px;" @click="showChargeModal(item)" v-if="parseInt(item.type) < 101 && user.type !== 'USER' && isProposal">Send Proposal</button> -->
             <!-- <button class="btn btn-warning" style="margin-right: 5px;" @click="bookmark(item.id)">
               <i class="fas fa-star" v-if="item.bookmark === true"></i>
               Bookmark</button> -->
-          </div>
-        </span>
+          <!-- </div>
+        </span> -->
         
         <label class="mt-3" v-if="parseInt(item.invested) > 0 && parseInt(item.amount) > 0">Percentage of amount invested</label>
         <b-progress :max="parseInt(item.initial_amount)" class="progress-bar bg-warning"  style="margin-bottom: 10px;" v-if="parseInt(item.invested) > 0 && parseInt(item.amount) > 0">
@@ -142,11 +143,6 @@
     <increment-modal :property="requestModal"></increment-modal>
     <show-image-modal ref="showImage"></show-image-modal>
     <show-process-modal  ref="createChargesModal"></show-process-modal>
-    <PushNotification
-      ref="pushNotification"
-      :currentToken="userToken"
-      @update-token="onUpdateToken"
-      @new-message="onNewMessage" />
   </div>
 </template>
 <style scoped lang="scss">
@@ -320,24 +316,9 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import REQUEST from '../modal/CreateRequest.js'
-import PushNotification from '../../components/notification/pushNotification'
 import api from '../../services/api'
 export default{
-  created() {
-    var userLoggedId = 1
-    // check if user has a token
-    api.user_profile(userLoggedId).then((response) => {
-      this.userProfile = response.data
-      this.userToken = this.userProfile.push_notification.ask_for_permission.token
-      if (this.userProfile.push_notification.ask_for_permission) {
-        setTimeout(() => {
-          // Simulate it wont ask for permission in the first user access
-          this.askForPermission = true
-        }, 4000)
-        this.enableNotifications()
-      }
-    })
-  },
+  created() {},
   mounted(){
     if(this.$route.params.code){
       setTimeout(() => {
@@ -435,8 +416,7 @@ export default{
     'empty': require('components/increment/generic/empty/EmptyDynamicIcon.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     'show-image-modal': require('components/increment/generic/modal/Image.vue'),
-    'show-process-modal': require('modules/request/ProcessModal.vue'),
-    PushNotification
+    'show-process-modal': require('modules/request/ProcessModal.vue')
   },
   methods: {
     redirect(parameter){
@@ -499,7 +479,6 @@ export default{
       //   filter.column = 'account_id'
       //   filter.value = this.user.userID
       // }
-      console.log('personal ', this.isPersonal)
       if(sort !== null){
         this.sort = sort
       }
@@ -549,7 +528,7 @@ export default{
           AUTH.user.ledger.amount = response.ledger
           $('#loading').css({display: 'none'})
           console.log('test: ', response)
-          if(response.data !== null){
+          if(response.data.length > 0){
             this.data = response.data
             this.size = parseInt(response.size)
             this.locations = response.locations ? response.locations : null
@@ -612,32 +591,6 @@ export default{
           $('#loading').css({display: 'none'})
         }
       })
-    },
-    enableNotifications () {
-      this.$refs.pushNotification.askForPermission()
-    },
-    onUpdateToken (newToken) {
-      this.userToken = newToken
-      // send token to the server
-      api.update_token(this.userProfile, this.userToken)
-    },
-    onNewMessage (message) {
-      /**
-       * Every messages which is fired by firebase is receive here
-       */
-      if (message.data.topic !== undefined || message.data.topic !== null) {
-        switch(message.data.topic.toLowerCase()) {
-          case 'acceptorder':
-            this.notificationTitle = 'NEW ORDER REQUEST'
-            break
-          case 'crockery':
-            this.notificationTitle = 'NEW CROCKERY REQUEST'
-            break
-        }
-        if(message.data.topic.toLowerCase() === 'acceptorder' || message.data.topic.toLowerCase() === 'crockery'){
-          this.notificationMessage.push(message.notification.body)
-        }
-      }
     }
   }
 }

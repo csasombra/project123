@@ -4,12 +4,14 @@ export default {
   sidebarMenu: [
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Requests', icon: 'fa fa-arrow-right', path: 'requests', flag: false, subMenu: null},
     {accountType: 'ALL', showOnAdmin: true, accountStatus: 'ALL', description: 'Dashboard', icon: 'fa fa-tachometer', path: 'dashboard', flag: false, subMenu: null},
+    {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Account Dashboard', icon: 'fas fa-users', path: 'account_dashboard', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Accounts', icon: 'fas fa-users', path: 'accounts', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Ledgers', icon: 'fas fa-coins', path: 'adminLedgers', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Plans', icon: 'fas fa-users', path: 'plans', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Deposits', icon: 'fas fa-piggy-bank', path: 'adminDeposits', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Withdrawals', icon: 'fas fa-money-check', path: 'adminWithdrawals', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Transfer Charges', icon: 'fas fa-stamp', path: 'transfer_charges', flag: false, subMenu: null},
+    {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Delivery Fees', icon: 'fas fa-shipping-fast', path: 'delivery_fees', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Coupons', icon: 'fas fa-stamp', path: 'coupons', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Resolution Tickets', icon: 'fas fa-bug', path: 'tickets', flag: false, subMenu: null},
     {accountType: 'ADMIN', showOnAdmin: true, accountStatus: 'ADMIN', description: 'Enable Support', icon: 'fas fa-headset', path: 'enableSupport', flag: false, subMenu: null},
@@ -19,12 +21,13 @@ export default {
     {accountType: 'MARKETING', showOnAdmin: false, accountStatus: 'MARKETING', description: 'Coupons', icon: 'fas fa-stamp', path: 'coupons', flag: false, subMenu: null},
     {accountType: 'MARKETING', showOnAdmin: false, accountStatus: 'MARKETING', description: 'Resolution Tickets', icon: 'fas fa-bug', path: 'tickets', flag: false, subMenu: null},
     {accountType: 'MARKETING', showOnAdmin: false, accountStatus: 'MARKETING', description: 'Scope', icon: 'fas fa-map-marker-alt', path: 'scopeLocation', flag: false, subMenu: null},
+    {accountType: 'MARKETING', showOnAdmin: false, accountStatus: 'MARKETING', description: 'Enable Support', icon: 'fas fa-stamp', path: 'enableSupport', flag: false, subMenu: null},
     {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Ledgers', icon: 'fas fa-coins', path: 'adminLedgers', flag: false, subMenu: null},
     {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Plans', icon: 'fas fa-users', path: 'plans', flag: false, subMenu: null},
     {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Withdrawals', icon: 'fas fa-stamp', path: 'adminWithdrawals', flag: false, subMenu: null},
     {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Deposits', icon: 'fas fa-stamp', path: 'adminDeposits', flag: false, subMenu: null},
     {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Transfer Charges', icon: 'fas fa-bug', path: 'transfer_charges', flag: false, subMenu: null},
-    {accountType: 'MARKETING', showOnAdmin: false, accountStatus: 'MARKETING', description: 'Enable Support', icon: 'fas fa-stamp', path: 'enableSupport', flag: false, subMenu: null},
+    {accountType: 'ACCOUNTANT', showOnAdmin: false, accountStatus: 'ACCOUNTANT', description: 'Delivery Fees', icon: 'fas fa-shipping-fast', path: 'delivery_fees', flag: false, subMenu: null},
     {accountType: 'SUPPORT', showOnAdmin: false, accountStatus: 'SUPPORT', description: 'Resolution Tickets', icon: 'fas fa-stamp', path: 'tickets', flag: false, subMenu: null},
     {accountType: 'SUPPORT', showOnAdmin: false, accountStatus: 'SUPPORT', description: 'Enable Support', icon: 'fas fa-bug', path: 'enableSupport', flag: false, subMenu: null},
     {accountType: 'SUPPORT', showOnAdmin: false, accountStatus: 'SUPPORT', description: 'Scope', icon: 'fas fa-bug', path: 'scopeLocation', flag: false, subMenu: null}
@@ -57,7 +60,7 @@ export default {
   settingsMenu: [
     {title: 'Profile', type: 'profile', allowed: ['cellular_number', 'address', 'sex', 'birth_date']},
     {title: 'Account', type: 'account', allowed: []},
-    // {title: 'Business Setting', type: 'merchant', allowed: ['prefix']},
+    {title: 'Business Profile', type: 'merchant', allowed: ['email', 'address']},
     {title: 'Notifications', type: 'notification', allowed: []},
     {title: 'Identifications', type: 'identifications', allowed: []}
   ],

@@ -19,7 +19,7 @@
       <label class="title"><b>Location Assigned</b></label>
        <div class="incre-row" style="margin-bottom: 30px;">
           <label v-if="localCode !== null">
-            <b>{{localCode.code.toUpperCase()}}</b> - {{`${localCode.route}, ${localCode.locality}, ${localCode.region}, ${localCode.country}`}}
+            <b>{{localCode.code !== null ? localCode.code.toUpperCase() : ''}}</b> - {{`${localCode.route}, ${localCode.locality}, ${localCode.region}, ${localCode.country}`}}
           </label>
           <br>
           <span class="form-group">
@@ -148,6 +148,7 @@ export default{
         }]
       }
       this.APIRequest('locations/retrieve', parameter).then(response => {
+        console.log('res', response)
         if(response.data.length > 0){
           this.localCode = response.data[0]
         }else{

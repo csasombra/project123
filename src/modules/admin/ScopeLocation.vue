@@ -7,13 +7,20 @@
       <button class="btn btn-primary pull-right mb-1" @click="showModal('create', null)">Add</button>
     </div>
 
-    <basic-filter 
+    <basic-filter
       v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
+
+      <Pager
+      :pages="numPages"
+      :active="activePage"
+      :limit="limit"
+      v-if="data.length > 0"
+    />
 
     <table class="table table-bordered table-responsive" v-if="data !== null">
       <thead>
@@ -52,10 +59,10 @@
         </tr>
       </tbody>
     </table>
-    <div>
+    <!-- <div>
       <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
       <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
-    </div>
+    </div> -->
 
     <!-- <Pager
       :pages="numPages"
@@ -86,6 +93,7 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import propertyModal from './ScopeLocation.js'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
+import Pager from 'src/components/increment/generic/pager/Pager.vue'
 export default{
   mounted(){
     if(this.user.type !== 'ADMIN'){
@@ -147,7 +155,8 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Confirmation
+    Confirmation,
+    Pager
   },
   methods: {
     deleteLocation(item){
@@ -237,7 +246,7 @@ export default{
         }],
         sort: sort,
         limit: this.limit,
-        offset: this.offset
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('location_scopes/retrieve', parameter).then(response => {

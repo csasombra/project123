@@ -134,6 +134,13 @@ export default{
       tokenRequired: true
     }
   }, {
+    path: '/account_dashboard/',
+    name: 'accountDashboard',
+    component: resolve => require(['modules/admin/AccountDashboard.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
     path: '/adminWithdrawals/',
     name: 'adminWithdrawals',
     component: resolve => require(['modules/admin/Withdrawals.vue'], resolve),
@@ -158,6 +165,13 @@ export default{
     path: '/transfer_charges/',
     name: 'transferCharges',
     component: resolve => require(['modules/admin/TransferCharges.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
+  }, {
+    path: '/delivery_fees/',
+    name: 'deliveryFees',
+    component: resolve => require(['modules/admin/DeliveryFees.vue'], resolve),
     meta: {
       tokenRequired: true
     }

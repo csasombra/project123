@@ -11,7 +11,14 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
     
-    <table class="table table-bordered table-responsive" v-if="data !== null">
+      <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="data.length > 0"
+      />
+
+    <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
           <td>Scope</td>
@@ -102,19 +109,22 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import CURRENCY from 'src/services/currency.js'
-// import Pager from 'src/components/increment/generic/pager/Pager.vue'
+import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import transferCharges from 'src/modules/admin/CreateTransferCharges.js'
 export default{
   mounted(){
     $('#loading').css({display: 'block'})
-    this._retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
+    this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
   },
   data(){
     return {
       user: AUTH.user,
-      data: null,
+      data: [],
       auth: AUTH,
+      limit: 5,
+      numPages: null,
+      activePage: 1,
       newAttachment: {
         activeId: null,
         file: null
@@ -172,7 +182,7 @@ export default{
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    // Pager,
+    Pager,
     Confirmation
   },
   methods: {
@@ -186,14 +196,18 @@ export default{
           clause: 'like',
           value: filter.value + '%'
         }],
-        sort: sort
+        sort: sort,
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       this.APIRequest('fund_transfer_charges/retrieve_all', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
-          this.data = null
+          this.data = []
+          this.numPages = null
         }
       })
     },
@@ -201,15 +215,19 @@ export default{
       let parameter = {
         sort: {
           created_at: 'desc'
-        }
+        },
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('fund_transfer_charges/retrieve_all', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
-          this.data = null
+          this.data = []
+          this.numPages = null
         }
       })
     },

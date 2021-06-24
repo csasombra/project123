@@ -3,12 +3,11 @@ import ROUTER from 'src/router'
 import Vue from 'vue'
 import Config from 'src/config.js'
 export default {
-  processRequest(group, userID, callback){
+  processRequest(group, user, callback){
     let vue = new Vue()
     let parameter = {
-      code: group.thread,
-      account_id: userID,
-      messenger_group_id: group.id
+      code: group.title,
+      account_code: user.code
     }
     $('#loading').css({display: 'block'})
     vue.APIRequest('requests/manage_request_by_thread', parameter).then(response => {

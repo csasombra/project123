@@ -1,0 +1,158 @@
+<template>
+  <div v-if="item !== null">
+    <div class="messenger-header">
+      <label class="back-icon" @click="changeConversationStatus('previous')">
+        <i class="fa fa-chevron-left"></i>
+        <label class="badge badge-danger" style="margin-left: -1px;" v-if="auth.messenger.badge > 0">{{auth.messenger.badge}}</label>
+      </label>
+      <div class="profile" v-if="item.last_message.title !== null">
+        <img :src="config.BACKEND_URL + item.last_message.title.profile.url" v-if="item.last_message.title.profile !== null">
+        <i class="fa fa-user-circle-o text-green" v-else></i>
+      </div>
+      <span class="details">
+        <label><b>ID Factory</b></label>
+        <label>Active</label>
+      </span>
+    </div>
+    <div class="conversation-content">
+        <div class="message-holder">
+          <messages :data="auth.messenger.messages" v-if="auth.messenger.messages !== null"></messages>
+        </div>
+        <div class="input-holder">
+          <send :flag="false" :groupId="item.id"></send>
+        </div>
+    </div>
+  </div>
+</template>
+<style scoped lang="scss">
+@import "~assets/style/colors.scss";
+.messenger-header{
+  width: 100%;
+  float: left;
+  height: 50px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  background-image: linear-gradient(to right, #fffff0, $primary);
+}
+.messenger-header{
+  line-height: 70px;
+}
+.back-icon{
+  width: 40px;
+  height: 40px;
+  float: left;
+  margin-top: 15px;
+  text-align: center;
+  margin-left: 2%;
+  margin-right: 2%;
+  line-height: 40px;
+}
+.back-icon:hover{
+  border-radius: 5px;
+  background: $primary;
+  cursor: pointer;
+  color: #fff;
+}
+.messenger-header .profile{
+  float: left;
+  width: 40px;
+  height: 40px;
+  margin-right: 2%;
+}
+.messenger-header .profile img{
+  height: 40px;
+  width: 40px;
+  z-index: 0;
+  border-radius: 50%;
+}
+.messenger-header .profile i{
+  line-height: 40px;
+  font-size: 40px;
+  margin-top: 15px;
+}
+
+.messenger-header .details{
+  float: left;
+  height: 40px;
+  margin-top: 20px;
+}
+.messenger-header .details label{
+  width: 100%;
+  float: left;
+  line-height: 12px;
+}
+
+.conversation-content{
+  height: 250px;
+  width: 100%;
+  float: left;
+  background: #fff;
+}
+.message-holder{
+  height: 250;
+  overflow-y: auto;
+  width: 100%;
+  float: left;
+  background: #fff;
+  display: flex;
+  flex-direction: column-reverse;
+}
+.input-holder{
+  height: 50px;
+  width: 100%;
+  float: left;
+  background: #fff;
+  border-top: solid 1px #ddd;
+}
+
+</style>
+<script>
+import ROUTER from 'src/router'
+import AUTH from 'src/services/auth'
+import CONFIG from 'src/config.js'
+import axios from 'axios'
+export default {
+  mounted(){
+    this.retrieve()
+  },
+  data(){
+    return {
+      user: AUTH.user,
+      config: CONFIG,
+      auth: AUTH
+    }
+  },
+  props: ['item'],
+  components: {
+    'send': require('modules/messengervue/overlay/Send.vue'),
+    'messages': require('modules/messengervue/overlay/Messages.vue')
+  },
+  methods: {
+    redirect(parameter){
+      ROUTER.push(parameter)
+    },
+    changeConversationStatus(status){
+      this.$parent.conversationStatus = status
+      AUTH.messenger.badge = 0
+    },
+    retrieve(){
+      if(this.item !== null){
+        let parameter = {
+          condition: [{
+            column: 'messenger_group_id',
+            value: this.item.id,
+            clause: '='
+          }]
+        }
+        this.APIRequest('messenger_messages/retrieve', parameter).done(response => {
+          if(response.data.length > 0){
+            AUTH.messenger.messages = response.data
+          }else{
+            AUTH.messenger.messages = null
+          }
+        })
+      }
+    }
+  }
+}
+</script>

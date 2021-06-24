@@ -4,15 +4,16 @@
 </template>
 <script>
 /* eslint-disable */
-import firebase from '../../services/firebase'
-import USER from '../../services/auth'
 import CONFIG from 'src/config'
-// import firebase from 'firebase'
+import firebase from 'firebase/app'
+import AUTH from 'src/services/auth'
+import 'firebase/messaging'
 export default {
   props: ['currentToken'],
   data () {
     return {
-      hasServiceWorker: false
+      hasServiceWorker: false,
+      auth: AUTH
     }
   },
   mounted () {
@@ -34,34 +35,34 @@ export default {
       if (!this.hasServiceWorker) {
         return
       }
-      // console.firebase | project settins | cloud message | web config | Key pair
-      firebase.messaging.usePublicVapidKey(CONFIG.vapidKey)
-      navigator.serviceWorker.register('./static/firebase-messaging-sw.js')
+      if (!firebase.apps.length) {
+        firebase.initializeApp(CONFIG.firebaseConfig)
+      }else {
+        firebase.app(); // if already initialized, use that one
+      }
+
+      navigator.serviceWorker.register('static/firebase-messaging-sw.js')
         .then((registration) => {
-
-          firebase.messaging.useServiceWorker(registration)
-
-          firebase.messaging.requestPermission().then(() => {
-
-            firebase.messaging.getToken().then((token) => {
+          const messaging = firebase.messaging()
+          messaging.useServiceWorker(registration)
+          messaging.requestPermission().then(() => {
+            messaging.getToken().then((token) => {
               if (token !== this.currentToken) {
-                console.log('token ', token)
-                this.$emit('update-token', token)
-                  let topic = 'Payhiram-' + USER.user.userID
-
-                  fetch('https://iid.googleapis.com/iid/v1/'+token+'/rel/topics/' + topic, {
+                console.log('token', token)
+                let topic = 'Payhiram-' + AUTH.user.userID
+                 fetch('https://iid.googleapis.com/iid/v1/'+ token +'/rel/topics/' + topic, {
                     method: 'POST',
                     headers: new Headers({
                       'Authorization': `key=${CONFIG.firebaseServerKey}`
                     })
-                  }).then(response => {
-                    if (response.status < 200 || response.status >= 400) {
-                      throw 'Error subscribing to topic: '+response.status + ' - ' + response.text();
-                    }
-                    console.log('Subscribed to "'+topic+'"');
-                  }).catch(error => {
-                    console.error(error);
-                  })
+                }).then(response => {
+                  if (response.status < 200 || response.status >= 400) {
+                    throw 'Error subscribing to topic: ' + response.status + ' - ' + response.text();
+                  }
+                  console.log('Subscribed to "' + topic + '"');
+                }).catch(error => {
+                  console.error(error);
+                })
               }
             }).catch((err) => console.log('--- token error:', err))
 
@@ -69,22 +70,21 @@ export default {
             console.log('Unable to get permission to notify.', err)
           })
 
-        }).catch(err => {
-          console.log('error register', err)
-        })
+          messaging.onMessage((payload) => {
+            console.log('----:new message:---- ', payload)
+            // this.$emit('new-message', payload)
+            if (payload.data.payload !== undefined && payload.data.payload !== null && payload.data.payload !== '' ) {
+              switch(payload.data.payload.toLowerCase()) {
+                case 'requests':
+                  console.log('requests')
+                  break
+              }
+            }
+          })
 
-      firebase.messaging.onMessage((payload) => {
-        console.log('notification ', payload)
-        switch(payload.data.topic.toLowerCase()) {
-          case 'acceptorder':
-            USER.setNotificationOrders(payload)
-            break
-          case 'crockery':
-            USER.setNotificationCrockery(payload)
-            break
-        }
-        this.$emit('new-message', payload)
-      })
+        }).catch(err => {
+          firebase.app()
+        })
     }
   }
 }
