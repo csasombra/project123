@@ -107,7 +107,7 @@ export default{
       data: [],
       auth: AUTH,
       limit: 5,
-      activePage: 0,
+      activePage: 1,
       offset: 0,
       numPages: null,
       modalProperty: propertyModal,
