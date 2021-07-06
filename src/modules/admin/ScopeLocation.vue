@@ -22,7 +22,7 @@
       v-if="data.length > 0"
     />
 
-    <table class="table table-bordered table-responsive" v-if="data !== null">
+    <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
           <td>Code</td>
@@ -104,7 +104,7 @@ export default{
   data(){
     return {
       user: AUTH.user,
-      data: null,
+      data: [],
       auth: AUTH,
       limit: 5,
       activePage: 0,
@@ -255,7 +255,7 @@ export default{
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
-          this.data = null
+          this.data = []
           this.numPages = null
         }
       })
