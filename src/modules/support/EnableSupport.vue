@@ -111,7 +111,7 @@ import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   mounted(){
-    this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    this.retrieve({username: 'asc'}, {column: 'payload_value', value: ''})
   },
   data(){
     return {
@@ -199,7 +199,7 @@ export default{
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
         }else{
-          this.data = null
+          this.data = []
           this.numPages = null
         }
       })
