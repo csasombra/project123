@@ -1,6 +1,6 @@
 <template>
   <div class="ledger-summary-container">
-	<basic-filter 
+  <basic-filter 
       v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
