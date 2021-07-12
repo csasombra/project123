@@ -127,54 +127,20 @@ export default {
     PendingRequestsTable
   },
   mounted() {
-    this.retrieveUsers()
-    this.retrieveUsersVerified()
-    this.retrievePartner()
-    this.retrieveAdmin()
+    this.retrieve()
   },
   methods: {
     redirect(params) {
       ROUTER.push(params)
     },
     retrieveUsers(){
-      let parameter = {
-        accountType: 'USER'
-      }
       $('#loading').css({display: 'block'})
-      this.APIRequest('accounts/retrieve_type_size', parameter).then(response => {
+      this.APIRequest('admin/account_dashboard', {}).then(response => {
         $('#loading').css({display: 'none'})
-        this.users = response.data
-      })
-    },
-    retrieveUsersVerified(){
-      let parameter = {
-        accountType: 'USER',
-        status: 'ACCOUNT_VERIFIED'
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('accounts/retrieve_type_size', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.user_verified = response.data
-      })
-    },
-    retrievePartner(){
-      let parameter = {
-        accountType: 'PARTNER'
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('accounts/retrieve_type_size', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.partner = response.data
-      })
-    },
-    retrieveAdmin(){
-      let parameter = {
-        accountType: 'ADMIN'
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('accounts/retrieve_type_size', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.admin = response.data
+        this.users = response.data.total_users
+        this.user_verified = response.data.total_verified
+        this.partner = response.data.total_partners
+        this.admin = response.data.total_admin
       })
     }
   }
