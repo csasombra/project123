@@ -133,7 +133,7 @@ export default {
     redirect(params) {
       ROUTER.push(params)
     },
-    retrieveUsers(){
+    retrieve(){
       $('#loading').css({display: 'block'})
       this.APIRequest('admin/account_dashboard', {}).then(response => {
         $('#loading').css({display: 'none'})
