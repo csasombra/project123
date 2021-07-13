@@ -16,6 +16,40 @@
       :limit="limit"
       v-if="data.length > 0"
     />
+
+    <div class="dropdown"> 
+      <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
+        <span>
+          <button class="btn btn-primary" v-if="data.length > 0">Export CSV By</button>
+        </span>
+        <span class="dropdown-menu dropdown-menu-left" aria-labelledby="settings">
+          <span class="dropdown-item" @click="exportFile('all_users')">
+            <label>All Users</label>
+          </span>
+          <span class="dropdown-item" @click="exportFile('users')">
+            <label>Users</label>
+          </span>
+          <span class="dropdown-item" @click="exportFile('users_with_image')">
+            <label>Users with Image</label>
+          </span>
+          <span class="dropdown-item" @click="exportFile('partners')">
+            <label>Partner</label>
+          </span>
+          <span class="dropdown-item" @click="exportFile('marketing')">
+            <label>Marketing</label>
+          </span>            
+          <span class="dropdown-item" @click="exportFile('investor')">
+            <label>Investor</label>
+          </span>
+          <span class="dropdown-item" @click="exportFile('support')">
+              <label>Support</label>
+            </span>
+          <span class="dropdown-item" @click="exportFile('admin')">
+              <label>Admin</label>
+            </span>
+        </span>
+      </span>
+    </div>
     
       <div class="incre-row">
         <ul class="nav nav-tabs nav-justified" style="line-height: 40px;">
@@ -122,10 +156,9 @@
     <empty v-if="data.length <= 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>
     <profile :item="selecteditem"></profile>
     <increment-modal :property="scopeLocation"></increment-modal>
-    <!-- <div>
-      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
-      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
-    </div> -->
+    <AccountSummaryExporter
+      ref="AccountSummaryExporter"
+    ></AccountSummaryExporter>
   </div>
 </template>
 <style scoped>
@@ -195,6 +228,7 @@ import CONFIG from 'src/config.js'
 import PartnerLocation from './CreatePartnerLocations.js'
 import ScopeLocation from './ScopeLocation.js'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
+import AccountSummaryExporter from './AccountSummaryExporter.vue'
 export default{
   mounted(){
     $('#loading').css({display: 'block'})
@@ -207,6 +241,9 @@ export default{
   },
   data(){
     return {
+      settingFlag: false,
+      menuFlag: false,
+      notifFlag: false,
       user: AUTH.user,
       data: [],
       auth: AUTH,
@@ -277,10 +314,24 @@ export default{
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'profile': require('modules/request/Profile.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Pager
-
+    Pager,
+    AccountSummaryExporter
   },
   methods: {
+    exportFile(name){
+      this.$refs.AccountSummaryExporter.showModal(name)
+    },
+    makeActive(icon){
+      if(icon === 'dropdown'){
+        this.settingFlag = true
+        this.menuFlag = false
+        this.notifFlag = false
+      }else{
+        this.settingFlag = false
+        this.menuFlag = false
+        this.notifFlag = false
+      }
+    },
     setEditTypeIndex(index, item){
       if(index === this.editTypeIndex){
         this.editTypeIndex = null
@@ -312,8 +363,8 @@ export default{
       this.$children[1].$children[0].retrieveLocation(item)
       this.$children[1].$children[0].retrieveImage(item)
       this.selecteditem['payload'] = 'account'
-      this.$children[1].$children[0].$children[0].retrieveRatings(item)
-      // this.$children[1].$children[0].$children[0].retrieveRatings()
+      // this.$children[1].$children[0].$children[0].retrieveRatings(item)
+      this.$children[1].$children[0].$children[0].retrieveRatings()
       $('#profileModal').modal('show')
     },
     redirect(params){
@@ -360,19 +411,12 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve_accounts', parameter).then(response => {
-        console.log('here', response)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           if(this.activeItem === 'USERIMAGE'){
             this.data = response.data.filter(function(e){
-              console.log('[e]', e.card)
               return e.card.length > 0
             })
-            // response.data.map(el => {
-            //   if(el.card != null || el.card.length > 0){
-            //     this.data = el.card
-            //   }
-            // })
           }else{
             this.data = response.data
           }
@@ -493,7 +537,6 @@ export default{
       })
     },
     isActive (menuItem) {
-      console.log('active', menuItem)
       return this.activeItem === menuItem
     },
     setActive (menuItem) {
