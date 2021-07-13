@@ -15,7 +15,7 @@
       v-if="data.length > 0"
     />
 
-    <table class="table table-bordered table-responsive" v-if="data !== null">
+    <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
           <td>Initiator</td>
@@ -52,7 +52,7 @@
     @onConfirm="a == 'a' ? complete($event) : remove($event)"
     >
     </Confirmation>
-    <empty v-if="data === null" :title="'No enable support found!'" ></empty>
+    <empty v-if="data.length > 0" :title="'No enable support found!'" ></empty>
     <browse-images-modal></browse-images-modal>
 
   </div>
@@ -121,7 +121,7 @@ export default{
         activeId: null,
         file: null
       },
-      data: null,
+      data: [],
       option: [],
       config: CONFIG,
       category: [{

@@ -86,6 +86,9 @@
 .fas{
   padding-right: 0px !important;
 }
+.fas:hover {
+  color: white;
+}
 </style>
 <script>
 import ROUTER from 'src/router'
