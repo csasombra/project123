@@ -27,7 +27,7 @@
           <td>{{item.status}}</td>
           <td>
             <i class="fas fa-check text-primary" @click="updateItem(item)"></i>
-            <i class="fas fa-trash text-danger" @click="removeItem(item)"></i>
+            <i class="fas fa-trash text-danger" @click="remove(item)"></i>
           </td>
         </tr>
       </tbody>
@@ -39,7 +39,11 @@
       v-if="data !== null"
     />
     <empty v-if="data === null" :title="'No plans found!'" ></empty>
-
+    <Confirmation
+      :title="'Removal Confirmation'"
+      :message="'Are you sure you want to continue this action?'"
+      ref="confirmation"
+      @onConfirm="removeItem"/>
   </div>
 </template>
 <style scoped>
@@ -93,6 +97,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
+import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   mounted(){
     this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
@@ -147,7 +152,8 @@ export default{
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Pager
+    Pager,
+    Confirmation
   },
   methods: {
     redirect(params){
@@ -189,6 +195,9 @@ export default{
         case 'list': this.listStyle = 'list'
           break
       }
+    },
+    remove(item){
+      this.$refs.confirmation.show(item.id)
     },
     removeItem(item){
       let parameter = {
