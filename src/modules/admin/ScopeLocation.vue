@@ -49,8 +49,8 @@
             {{item.longitude}}
           </td>
           <td>
-            <button class="btn btn-primary" @click="showModal('update', item)">
-              <i class="fas fa-edit"></i>
+            <button class="btn btn-primary" style="color: white" @click="showModal('update', item)">
+              <i class="fas fa-edit green"></i>
             </button>
             <button class="btn btn-danger" @click="setOnRemoveItem(item)">
               <i class="fas fa-trash"></i>
@@ -59,41 +59,32 @@
         </tr>
       </tbody>
     </table>
-    <!-- <div>
-      <button class="btn btn-primary pull-right" style="margin-left: 10px;" @click="pagination(true)">Next</button>
-      <button class="btn btn-primary pull-right" @click="pagination(false)">Previous</button>
-    </div> -->
 
-    <!-- <Pager
-      :pages="numPages"
-      :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
-      /> -->
+    <Confirmation
+    :title="'Removal Confirmation'"
+    :message="'Are you sure you want to continue this action?'"
+    ref="confirmation"
+    @onConfirm="removeItem"/>
 
-      <Confirmation
-      :title="'Removal Confirmation'"
-      :message="'Are you sure you want to continue this action?'"
-      ref="confirmation"
-      @onConfirm="removeItem"/>
-
-    <!-- <empty v-if="data === null" :title="'No accounts available!'" :action="'Keep growing.'"></empty>  -->
+    <empty v-if="data.length > 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty> 
     <increment-modal :property="modalProperty"></increment-modal>
   </div>
 </template>
 <style lang="scss" scoped> 
 @import "~assets/style/colors.scss";
-.fas{
+.fas {
   padding-right: 0px !important;
 }
-.fas:hover {
-  color: white;
+.green{ 
+  color: white
+}
+.green:hover{ 
+  background-color:white
 }
 </style>
 <script>
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
-import CONFIG from 'src/config.js'
 import propertyModal from './ScopeLocation.js'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
@@ -211,6 +202,12 @@ export default{
           if(input.variable === 'country'){
             input.value = item.country
           }
+          if(input.variable === 'latitude'){
+            input.value = item.latitude
+          }
+          if(input.variable === 'longitude'){
+            input.value = item.longitude
+          }
           this.modalProperty = {...modalData}
         })
       }
@@ -218,15 +215,6 @@ export default{
     },
     setOnRemoveItem(item){
       this.$refs.confirmation.show(item.id)
-    },
-    pagination(flag){
-      if(flag === false && this.offset > 5){
-        this.offset = this.offset - 5
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      }else{
-        this.offset = this.offset + 5
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      }
     },
     retrieve(sort, filter){
       if(sort !== null){
