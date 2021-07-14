@@ -1,12 +1,12 @@
 <template>
 <div class="holder">
-  <button
+  <!-- <button
     class="btn btn-primary pull-right"
     style="margin-bottom: 25px; float:right"
     @click="createTicket()">
     <i class="fa fa-plus"></i>
     New Issue Ticket
-  </button>
+  </button> -->
   <basic-filter
       v-bind:category="category"
       :activeCategoryIndex="0"
