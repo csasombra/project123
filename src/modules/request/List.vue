@@ -30,11 +30,13 @@
       
       <div class="rl-container-item" v-for="(item, index) in data" :key="index">
         <span class="header">
-          <label class="action-link text-primary" @click="showProfileModal(item)">
+          <label class="action-link text-primary">
+          <!-- <label class="action-link text-primary" @click="showProfileModal(item)"> -->
             <i class="fas fa-user-circle" style="color: #555; padding-right: 5px;" v-if="item.account.profile === null"></i>
             <img :src="config.BACKEND_URL + item.account.profile.url" height="30px" width="30px;" style="border-radius: 50%;" v-else>
           </label>
-          <label class="action-link text-primary" @click="showProfileModal(item)">
+          <label class="action-link text-primary">
+          <!-- <label class="action-link text-primary" @click="showProfileModal(item)"> -->
             {{item.account.username}}
           </label>
           <label class="text-danger" v-if="item.coupon !== null && parseInt(item.account_id) === user.userID">
