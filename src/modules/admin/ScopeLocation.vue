@@ -66,7 +66,7 @@
     ref="confirmation"
     @onConfirm="removeItem"/>
 
-    <empty v-if="data.length > 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty> 
+    <!-- <empty v-if="data.length > 0" :title="'No accounts available!'" :action="'Keep growing.'"></empty>  -->
     <increment-modal :property="modalProperty"></increment-modal>
   </div>
 </template>
