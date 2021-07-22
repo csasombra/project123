@@ -105,7 +105,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in returnData" :key="index">
-          <td>{{item.created_at}}</td>
+          <td>{{item.created_at_human}}</td>
           <td>
             <label class="action-link text-primary" @click="showProfileModal(item)">{{item.username}}</label>
           </td>

@@ -43,7 +43,7 @@
         <div class="modal-footer">
           <span
             style="margin-right:5%;color:#c5c5c5;font-weight:bold"  
-            v-if="data.body === null"
+            v-if="data.body.length === 0"
           >cannot export an empty record. :(</span>
           <vue-json-to-csv :json-data="data.jsonData" :csv-title="data.excelTitle" v-if="data.body.length > 0">
             <button
