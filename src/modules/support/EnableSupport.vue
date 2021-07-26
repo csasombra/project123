@@ -21,8 +21,6 @@
           <td>Initiator</td>
           <td>Assigned To</td>
           <td>Status</td>
-          <!-- <td>Request Status</td> -->
-          <!-- <td>Actions</td> -->
         </tr>
       </thead>
       <tbody>
@@ -52,7 +50,7 @@
     @onConfirm="a == 'a' ? complete($event) : remove($event)"
     >
     </Confirmation>
-    <empty v-if="data.length > 0" :title="'No enable support found!'" ></empty>
+    <empty v-if="data.length === 0" :title="'No enable support found!'" ></empty>
     <browse-images-modal></browse-images-modal>
 
   </div>
@@ -194,6 +192,7 @@ export default{
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('enable_supports/retrieve', parameter).then(response => {
+        console.log('[res]', response.data)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data

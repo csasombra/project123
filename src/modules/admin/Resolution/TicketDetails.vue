@@ -4,12 +4,12 @@
     <label class="text-primary action-link" @click="redirect('/tickets')"><i class="fas fa-arrow-left"></i> <b> back </b>to previous</label>
   </div>
   <span v-if="data.length !== 0">
-    <span id="title"><b>{{data.title}}</b>#{{data.id}}</span>
+    <span id="title">#{{data.id}} <b>{{data.title}}</b></span>
       <!-- <br><span>{{status}} {{ timeIntervalRes + ' ago'}} by {{data.account_id}}</span> -->
     </span>
    <div class="row" >
-    <div class="col-10" id="detail">
-      <form>
+    <div class="col-6" id="detail">
+      <!-- <form> -->
         <!-- <div class="form-group">
           <label for="text"><b>Title</b></label>
           <label id="text">{{title}}</label> -->
@@ -19,32 +19,37 @@
           <label for="pwd"><b>Details</b></label>
           <p type="password"  id="pwd">{{ detail }}</p>
         <!-- </div> -->
-        <span><b>Image attachments</b></span><br>
+        <!-- <span><b>Image attachments</b></span><br> -->
 
-        <multiple-img-uploader  v-if="data.length !== 0" :imageList="imageList" :isEditableProp="editable"/>
-        <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button>
+        <!-- <multiple-img-uploader  v-if="data.length !== 0" :imageList="imageList" :isEditableProp="editable"/> -->
 
-      </form>
-    </div>
-    <div class="col-2" id="uneditableDetail">
+      <!-- </form> -->
+    <div  id="uneditableDetail">
       <div>
         <ticket-type v-if="data.length !== 1" :isEditable="{isEditable: user.userID === data.account_id, typeResult: data.type}"/>
       <hr>
+      <br>
       <span>Assignee</span>
       <br>
-      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ data.assigned != null ? assignTo.username : assignee ? assignee : 'Add assignee resolver'}}</u></b></p>
-      <assignees ref="assign"></assignees>
+      <br>
+      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ data.assignTo != null ? data.assignTo.username : assignee ? assignee : 'Add assignee resolver'}}</u></b></p>
+      <assignees ref="assign" :isAssigned="data.assignTo"></assignees>
       <hr>
+      <br>
       <span>Status</span>
       <select :required="true" class="form-control" v-model="data.status">
         <option v-for="(option, index) in options" :selected="data.status" v-bind:key="index">{{option.name}}</option>
       </select>
       </div>
     </div>
+  <br>
+    <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button>
   </div>
   <br>
-  <br>
-  <comments v-if="data !== null" :id="data.id"/>
+  <div class="col-6">
+    <comments v-if="data !== null" :id="data.id"/>
+  </div>
+  </div>
 </div>
 
 </template>
@@ -106,7 +111,9 @@ export default {
       let parameter = {
         ticket_id: this.$route.params.id,
         assigned_to: this.assigned
+        // status
       }
+      console.log('[parameter]', parameter)
       $('#loading').css({display: 'block'})
       this.APIRequest('tickets/update_assign', parameter).then(response => {
         $('#loading').css({display: 'none'})
@@ -132,9 +139,9 @@ export default {
         if(response.data.length > 0){
           this.data = response.data[0]
           this.timeIntervalRes = this.getticketTimePassed(this.data.created_at)
-          if(this.data.images !== null) {
-            this.imageList = this.data.images.split(' ')
-          }
+          // if(this.data.images !== null) {
+          //   this.imageList = this.data.images.split(' ')
+          // }
           this.editable = this.user.userID === this.data.account_id
           this.statusSelected = this.data.status.toLowerCase()
           switch(this.data.status.toLowerCase()){

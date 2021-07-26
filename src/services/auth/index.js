@@ -171,10 +171,14 @@ export default {
     localStorage.removeItem('xyzABCdefPayhiram')
     this.setUser(null)
     let vue = new Vue()
-    vue.APIRequest('authenticate/invalidate')
     this.clearNotifTimer()
-    this.tokenData.token = null
-    ROUTER.go('/')
+    vue.APIRequest('authenticate/invalidate').then((response) => {
+      localStorage.removeItem('usertoken')
+      this.tokenData.token = null
+      this.tokenData.loading = false
+      ROUTER.go('/')
+    })
+    localStorage.clear()
   },
   retrieveNotifications(accountId){
     let vue = new Vue()
