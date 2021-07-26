@@ -10,12 +10,12 @@
       @changeStyle="manageGrid($event)"
       :grid="['list', 'th-large']"></basic-filter>
 
-      <Pager
+      <!-- <Pager
       :pages="numPages"
       :active="activePage"
       :limit="limit"
       v-if="data.length > 0"
-    />
+    /> -->
 
     <div class="dropdown"> 
       <span class="nav-item" v-bind:class="{'active-menu': settingFlag === true}" data-toggle="dropdown" id="settings" aria-haspopup="true" aria-expanded="false" v-on:click="makeActive('dropdown')" v-bind:onkeypress="makeActive('')">
@@ -51,6 +51,9 @@
       </span>
     </div>
     
+    <span class="incre-row">
+      <basic-pager :pages="numPages" :active="activePage" :limit="limit" v-if="data.length > 0"></basic-pager>
+    </span>
       <div class="incre-row">
         <ul class="nav nav-tabs nav-justified" style="line-height: 40px;">
           <li class="nav-item">
@@ -227,7 +230,6 @@ import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import PartnerLocation from './CreatePartnerLocations.js'
 import ScopeLocation from './ScopeLocation.js'
-import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import AccountSummaryExporter from './AccountSummaryExporter.vue'
 export default{
   mounted(){
@@ -246,6 +248,7 @@ export default{
       notifFlag: false,
       user: AUTH.user,
       data: [],
+      size: 0,
       auth: AUTH,
       selecteditem: null,
       config: CONFIG,
@@ -314,7 +317,7 @@ export default{
     'basic-filter': require('components/increment/generic/filter/Basic.vue'),
     'profile': require('modules/request/Profile.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
-    Pager,
+    'basic-pager': require('components/increment/generic/pager/Pager.vue'),
     AccountSummaryExporter
   },
   methods: {
@@ -413,6 +416,7 @@ export default{
       this.APIRequest('accounts/retrieve_accounts', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
+          this.size = response.size
           if(this.activeItem === 'USERIMAGE'){
             this.data = response.data.filter(function(e){
               return e.card.length > 0

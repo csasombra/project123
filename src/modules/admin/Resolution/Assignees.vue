@@ -21,8 +21,8 @@
                                     <td>{{item.username}}</td>
                                     <td>{{item.account_type}}</td>
                                     <td>
-                                        <button class="btn btn-primary" v-if="item.username !== isAssigned" @click="setAssignee(item.id, item.username)">Assign</button>
-                                        <button class="btn btn-primary" v-if="item.username === isAssigned">Assigned</button>
+                                        <button class="btn btn-primary" v-if="item.username != isAssigned.username" @click="setAssignee(item.id, item.username)">Assign</button>
+                                        <button class="btn btn-secondary" v-if="item.username === isAssigned.username">Assigned</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -40,10 +40,10 @@
 export default {
   data() {
     return {
-      assignees: null,
-      isAssigned: null
+      assignees: null
     }
   },
+  props: ['isAssigned'],
   methods: {
     retrieveAssignees() {
       let parameter = {
@@ -58,6 +58,7 @@ export default {
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('accounts/retrieve', parameter).then(response => {
+        console.log('[response]', response, this.isAssigned)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0) {
           this.assignees = response.data
@@ -68,8 +69,6 @@ export default {
       })
     },
     setAssignee(id, username){
-      console.log(this.isAssigned, id, username)
-      this.isAssigned = id
       this.$parent.assigned = id
       this.$parent.assignee = username
     }

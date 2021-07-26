@@ -58,7 +58,7 @@ export default {
       user: AUTH.user,
       auth: AUTH,
       limit: 5,
-      activePage: 0,
+      activePage: 1,
       currentFilter: null,
       currentSort: null,
       numPages: null,
@@ -109,7 +109,6 @@ export default {
       ROUTER.push('/tickets/create/')
     },
     retrieve(sort, filter) {
-      console.log('df', this.statusType)
       if(sort !== null){
         this.sort = sort
       }

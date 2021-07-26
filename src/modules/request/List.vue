@@ -11,10 +11,10 @@
         <button v-if="isShow" class="btn btn-primary pull-right" style="float:left !important" @click="showPublicRequest()">back</button>
         <!-- <button class="btn btn-primary pull-right" @click="redirect('/createRequest')">Post a request</button> -->
         <!-- <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="redirect('/createRequestBorrow')">Post borrow request</button> -->
-        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('personal')">View my request</button>
-        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('ongoing')">OnGoing Requests</button>
-        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('onDelivery')">OnDelivery Reqest</button>
-        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('completed')">Completed Reqest</button>
+        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('personal')">View my Requests</button>
+        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('ongoing')">Ongoing Requests</button>
+        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('onDelivery')">On Delivery Requests</button>
+        <button class="btn btn-primary pull-right" style="margin-right: 8px;" @click="showMyRequest('completed')">Completed Requests</button>
         <!-- <button class="btn btn-primary pull-right" @click="showRequestModal('create')">Post a request</button> -->
       </div>
       <basic-filter 
