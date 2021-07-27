@@ -32,7 +32,7 @@
       <span>Assignee</span>
       <br>
       <br>
-      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ data.assignTo != null ? data.assignTo.username : assignee ? assignee : 'Add assignee resolver'}}</u></b></p>
+      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ assignee != null ? assignee : data.assignTo != null ? data.assignTo.username : 'Add assignee resolver'}}</u></b></p>
       <assignees ref="assign" :isAssigned="data.assignTo"></assignees>
       <hr>
       <br>
@@ -86,13 +86,13 @@ export default {
       assigned: null,
       options: [
         {
-          name: 'open'
+          name: 'OPEN'
         },
         {
-          name: 'pending'
+          name: 'PENDING'
         },
         {
-          name: 'closed'
+          name: 'CLOSED'
         }
       ]
     }
@@ -110,15 +110,15 @@ export default {
     update() {
       let parameter = {
         ticket_id: this.$route.params.id,
-        assigned_to: this.assigned
-        // status
+        assigned_to: this.assigned,
+        status: this.data.status
       }
-      console.log('[parameter]', parameter)
       $('#loading').css({display: 'block'})
       this.APIRequest('tickets/update_assign', parameter).then(response => {
         $('#loading').css({display: 'none'})
         if(response.data === true) {
-          this.retrieveItem(this.$route.params.id)
+          // this.retrieveItem(this.$route.params.id)
+          this.redirect('/tickets')
         }
       })
     },

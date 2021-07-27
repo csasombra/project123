@@ -21,8 +21,9 @@
                                     <td>{{item.username}}</td>
                                     <td>{{item.account_type}}</td>
                                     <td>
-                                        <button class="btn btn-primary" v-if="item.username != isAssigned.username" @click="setAssignee(item.id, item.username)">Assign</button>
-                                        <button class="btn btn-secondary" v-if="item.username === isAssigned.username">Assigned</button>
+                                        <button class="btn btn-primary" v-if="item.id == (assign != null ? assign.id : item.id) && assign == null" @click="setAssignee(item.id, item.username)">Assign</button>
+                                        <button class="btn btn-primary" v-if="item.id != (assign != null ? assign.id : item.id)" @click="setAssignee(item.id, item.username)">Assign</button>
+                                        <button class="btn btn-secondary" v-if="(item.id === (assign != null ? assign.id : item.id)) && assign != null">Assigned</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -40,7 +41,8 @@
 export default {
   data() {
     return {
-      assignees: null
+      assignees: null,
+      assign: null
     }
   },
   props: ['isAssigned'],
@@ -49,6 +51,10 @@ export default {
       let parameter = {
         condition: [{
           value: 'USER',
+          column: 'account_type',
+          clause: '!='
+        }, {
+          value: 'PARTNER',
           column: 'account_type',
           clause: '!='
         }],
@@ -62,6 +68,7 @@ export default {
         $('#loading').css({display: 'none'})
         if(response.data.length > 0) {
           this.assignees = response.data
+          this.assign = this.isAssigned
           $('#assignees').modal('show')
         } else {
           this.assignees = null

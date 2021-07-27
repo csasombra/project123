@@ -3,13 +3,12 @@
     <div class="incre-row">
       <button class="btn btn-primary pull-right" @click="showTransferModal('create')">Add</button>
     </div>
-    <basic-filter 
-      v-bind:category="category" 
+    <filter-product v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
-      @changeStyle="manageGrid($event)"
-      :grid="['list', 'th-large']"></basic-filter>
+      :grid="['list']">
+    </filter-product>
     
       <Pager
         :pages="numPages"
@@ -24,7 +23,7 @@
           <td>Scope</td>
           <td>Currency</td>
           <td>Minimum Amount</td>
-          <td>Max Amount</td>
+          <td>Maximum Amount</td>
           <td>Charge</td>
           <td>Date Added</td>
           <td>Actions</td>
@@ -132,47 +131,37 @@ export default{
       config: CONFIG,
       transferModal: transferCharges,
       category: [{
-        title: 'Sort by',
+        title: 'Sort By',
         sorting: [{
           title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'asc'
+          payload_value: 'desc',
+          type: 'date'
         }, {
-          title: 'Date posted descending',
+          title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'desc'
-        }, {
-          title: 'Type ascending',
-          payload: 'type',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Type descending',
           payload: 'type',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
-          title: 'Charge ascending',
-          payload: 'charge',
-          payload_value: 'asc'
+          title: 'Type ascending',
+          payload: 'type',
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Charge descending',
           payload: 'charge',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
-          title: 'Minimum amount ascending',
-          payload: 'min_amount',
-          payload_value: 'asc'
-        }, {
-          title: 'Minimum amount descending',
-          payload: 'min_amount',
-          payload_value: 'desc'
-        }, {
-          title: 'Maximum amount ascending',
-          payload: 'max_amount',
-          payload_value: 'asc'
-        }, {
-          title: 'Maximum amount descending',
-          payload: 'max_amount',
-          payload_value: 'desc'
+          title: 'Charge ascending',
+          payload: 'charge',
+          payload_value: 'asc',
+          type: 'text'
         }]
       }]
     }
@@ -180,7 +169,7 @@ export default{
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
-    'basic-filter': require('components/increment/generic/filter/Basic.vue'),
+    'filter-product': require('components/increment/ecommerce/filter/Product.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
     Confirmation
