@@ -2,12 +2,12 @@
   <div class="ledger-summary-container" style="margin-top: 5%">
     <div class="incre-row">
     </div>
-    <basic-filter 
-      v-bind:category="category" 
+    <filter-product v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
-      :grid="['list', 'th-large']"></basic-filter>
+      :grid="['list']">
+    </filter-product>
 
       <Pager
         :pages="numPages"
@@ -124,47 +124,37 @@ export default{
       activePage: 1,
       offset: 0,
       category: [{
-        title: 'Sort by',
+        title: 'Sort By',
         sorting: [{
           title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'asc'
+          payload_value: 'desc',
+          type: 'date'
         }, {
-          title: 'Date posted descending',
+          title: 'Date posted ascending',
           payload: 'created_at',
-          payload_value: 'desc'
-        }, {
-          title: 'Amount ascending',
-          payload: 'amount',
-          payload_value: 'asc'
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Amount descending',
           payload: 'amount',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
-          title: 'Description ascending',
-          payload: 'description',
-          payload_value: 'asc'
+          title: 'Amount ascending',
+          payload: 'amount',
+          payload_value: 'asc',
+          type: 'text'
         }, {
           title: 'Description descending',
           payload: 'description',
-          payload_value: 'desc'
+          payload_value: 'desc',
+          type: 'text'
         }, {
-          title: 'Sender ascending',
-          payload: 'owner.username',
-          payload_value: 'asc'
-        }, {
-          title: 'Sender descending',
-          payload: 'owner.username',
-          payload_value: 'desc'
-        }, {
-          title: 'Receiver ascending',
-          payload: 'receiver.username',
-          payload_value: 'asc'
-        }, {
-          title: 'Receiver descending',
-          payload: 'receiver.username',
-          payload_value: 'desc'
+          title: 'Description ascending',
+          payload: 'description',
+          payload_value: 'asc',
+          type: 'text'
         }]
       }],
       filter: null,
@@ -173,7 +163,7 @@ export default{
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'basic-filter': require('components/increment/generic/filter/Basic.vue'),
+    'filter-product': require('components/increment/ecommerce/filter/Product.vue'),
     Pager
   },
   methods: {
