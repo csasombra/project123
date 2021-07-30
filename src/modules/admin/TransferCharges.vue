@@ -169,7 +169,7 @@ export default{
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
     'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
-    'filter-product': require('components/increment/ecommerce/filter/Product.vue'),
+    'filter-product': require('components/increment/imarketvue/filter/Product.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
     Confirmation
