@@ -41,6 +41,14 @@
   color: #fff !important;
 }
 
+.green{
+  color: white !important;
+}
+
+.green:hover{
+  color: #22B173 !important;
+}
+
 @media (max-width: 991px) {
   .main-sidebar {
     min-height: unset;

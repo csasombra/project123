@@ -75,12 +75,12 @@
 .fas {
   padding-right: 0px !important;
 }
-.green{ 
-  color: white
-}
-.green:hover{ 
-  background-color:white
-}
+// .green{ 
+//   color: white
+// }
+// .green:hover{ 
+//   background-color:white
+// }
 </style>
 <script>
 import ROUTER from 'src/router'
