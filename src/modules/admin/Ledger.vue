@@ -163,7 +163,7 @@ export default{
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'filter-product': require('components/increment/ecommerce/filter/Product.vue'),
+    'filter-product': require('components/increment/generic/filter/FilterWithCalendar.vue'),
     Pager
   },
   methods: {
