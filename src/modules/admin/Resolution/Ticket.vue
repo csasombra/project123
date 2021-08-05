@@ -23,7 +23,7 @@
   />
 
   <ticket-table :ticketData = "data"/>
-    <messenger v-if="auth.messenger.data !== null"></messenger>
+  <messenger v-if="auth.messenger.data !== null"></messenger>
 </div>
 </template>
 
@@ -108,7 +108,7 @@ export default {
     createTicket() {
       ROUTER.push('/tickets/create/')
     },
-    retrieve(sort, filter) {
+    retrieve(sort, filter, status = 'PENDING') {
       if(sort !== null){
         this.sort = sort
       }
@@ -121,9 +121,6 @@ export default {
       if(filter === null && this.filter !== null){
         filter = this.filter
       }
-      if(this.statusType.toUpperCase() === 'OPEN') {
-        this.statusType = this.statusType.toUpperCase()
-      }
       let parameter = {
         condition: [
           {
@@ -132,7 +129,7 @@ export default {
             clause: 'like'
           },
           {
-            value: this.statusType,
+            value: status,
             column: 'status',
             clause: '='
           }],
