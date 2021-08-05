@@ -134,7 +134,7 @@ export default{
           title: 'Date posted ascending',
           payload: 'created_at',
           payload_value: 'asc',
-          type: 'text'
+          type: 'date'
         }, {
           title: 'Amount descending',
           payload: 'amount',
@@ -143,16 +143,6 @@ export default{
         }, {
           title: 'Amount ascending',
           payload: 'amount',
-          payload_value: 'asc',
-          type: 'text'
-        }, {
-          title: 'Description descending',
-          payload: 'description',
-          payload_value: 'desc',
-          type: 'text'
-        }, {
-          title: 'Description ascending',
-          payload: 'description',
           payload_value: 'asc',
           type: 'text'
         }]
