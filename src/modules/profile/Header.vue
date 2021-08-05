@@ -15,7 +15,8 @@
       </div>
       <p v-else class="text-white">{{item.account.username}}</p>
       <ratings class="text-white" :ratings="rating"></ratings>
-      <p class="text-white"><i v-if="item.status !== 'NOT_VERIFIED'" class="far fa-check-circle" color="primary"></i><i> {{item.status}}</i></p>
+      <p class="text-white"><i v-if="item.status !== 'NOT_VERIFIED' || item.status !== 'INVALID_EMAIL'" class="far fa-check-circle" color="primary"></i><i> {{item.status}}</i> <b v-if="item.status === 'NOT_VERIFIED'" @click="resendEmail(item)" style="cursor: pointer"><u>(Resend)</u></b></p>
+      <p v-if="message === true" class="text-white"><i>You successfully resend your email.</i></p>
       <br>
 
     </div>
@@ -83,13 +84,27 @@ export default{
     return {
       user: AUTH.user,
       config: CONFIG,
-      rating: null
+      rating: null,
+      message: false
     }
   },
   props: ['item', 'location'],
   methods: {
     redirect(parameter){
       ROUTER.push(parameter)
+    },
+    resendEmail(item){
+      let parameter = {
+        account_id: item.account.id
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('emails/verification', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        console.log('[response]', response)
+        if(response > 0){
+          this.message = true
+        }
+      })
     },
     retrieveRatings(item){
       let parameter = null
