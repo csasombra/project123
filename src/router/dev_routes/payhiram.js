@@ -386,6 +386,14 @@ export default{
     meta: {
       tokenRequired: true
     }
+  },
+  {
+    path: '/currency',
+    name: 'currency',
+    component: resolve => require(['modules/currency/index.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }
   ]
 }
