@@ -1,15 +1,12 @@
 import CURRENCY from 'src/currency.js'
-var currencies = []
-var options = []
-CURRENCY.currency.map(item => {
-  var object = {
+let currency = CURRENCY.currency.map(item => {
+  return {
     label: item.long_name,
     value: item.long_name
   }
-  options.push(object)
 })
 export default {
-  id: 'createCurrency',
+  id: 'modalCurrencyk',
   size: 'modal-md',
   title: 'Add Currency',
   background: null,
@@ -20,10 +17,10 @@ export default {
     value: null,
     required: true,
     id: 'type',
-    type: 'select_specified',
-    options: currencies
+    type: 'select_currency',
+    options: currency
   }],
-  route: 'payloads/create',
+  route: 'payloads/create_currency',
   button: {
     left: 'Cancel',
     right: 'Submit'

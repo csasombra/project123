@@ -1,52 +1,51 @@
 <template>
   <div class="ledger-summary-container">
     <div class="incre-row">
-      <button class="btn btn-primary pull-right" @click="showCurrencyModal('create')">Add</button>
+      <button class="btn btn-primary pull-right" @click="showTransferModal('create')">Add</button>
     </div>
-  <basic-filter 
-      v-bind:category="category" 
+    <filter-product v-bind:category="category" 
       :activeCategoryIndex="0"
       :activeSortingIndex="0"
       @changeSortEvent="retrieve($event.sort, $event.filter)"
-      @changeStyle="manageGrid($event)"
-      :grid="['list', 'th-large']"></basic-filter>
-    <table class="table table-bordered table-responsive" v-if="data !== null">
+      :grid="['list']">
+    </filter-product>
+    
+      <Pager
+        :pages="numPages"
+        :active="activePage"
+        :limit="limit"
+        v-if="data.length > 0"
+      />
+
+    <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
-          <td>Plan</td>
-          <td>Name</td>
-          <td>Merchant</td>
-          <td>Amount</td>
-          <td>Status</td>
+          <td>Date Added</td>
+          <td>Currency</td>
           <td>Actions</td>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
-          <td>{{item.plan}}</td>
-          <td>{{item.account ? item.account.username : null}}</td>
-          <td>{{item.merchant ? item.merchant.name : null}}</td>
-          <td>{{item.currency + ' ' + item.amount}}</td>
-          <td>{{item.status}}</td>
+          <td>{{item.created_at_human}}</td>
+          <td>{{item.currency}}</td>
           <td>
-            <i class="fas fa-check text-primary" @click="updateItem(item)"></i>
-            <i class="fas fa-trash text-danger" @click="remove(item)"></i>
+            <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
           </td>
         </tr>
       </tbody>
     </table>
-    <Pager
-      :pages="numPages"
-      :active="activePage"
-      :limit="limit"
-      v-if="data !== null"
-    />
-    <empty v-if="data === null" :title="'No plans found!'" ></empty>
-    <Confirmation
+
+      <Confirmation
       :title="'Removal Confirmation'"
       :message="'Are you sure you want to continue this action?'"
       ref="confirmation"
-      @onConfirm="removeItem"/>
+      @onConfirm="removeItem"
+      />
+
+
+    <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
+    <increment-modal :property="modalCurrency"></increment-modal>
   </div>
 </template>
 <style scoped>
@@ -100,62 +99,57 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
-import createCurrency from 'src/modules/currency/createCurrency.js'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
+import currencyModal from 'src/modules/currency/createCurrencys.js'
 export default{
   mounted(){
-    this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
+    $('#loading').css({display: 'block'})
+    this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
   },
   data(){
     return {
       user: AUTH.user,
+      data: [],
       auth: AUTH,
+      limit: 5,
+      numPages: null,
+      activePage: 1,
       newAttachment: {
         activeId: null,
         file: null
       },
-      data: null,
-      option: [],
       config: CONFIG,
-      currencyModal: createCurrency,
+      modalCurrency: currencyModal,
       category: [{
-        title: 'Sort by',
+        title: 'Sort By',
         sorting: [{
-          title: 'Plan ascending',
-          payload: 'plan',
-          payload_value: 'asc'
+          title: 'Date posted ascending',
+          payload: 'created_at',
+          payload_value: 'desc',
+          type: 'date'
         }, {
-          title: 'Plan descending',
-          payload: 'plan',
-          payload_value: 'desc'
+          title: 'Date posted ascending',
+          payload: 'created_at',
+          payload_value: 'asc',
+          type: 'text'
         }, {
-          title: 'Amount ascending',
-          payload: 'amount',
-          payload_value: 'asc'
+          title: 'Currency descending',
+          payload: 'type',
+          payload_value: 'desc',
+          type: 'text'
         }, {
-          title: 'Amount descending',
-          payload: 'amount',
-          payload_value: 'desc'
-        }, {
-          title: 'Status ascending',
-          payload: 'status',
-          payload_value: 'asc'
-        }, {
-          title: 'Status descending',
-          payload: 'status',
-          payload_value: 'desc'
+          title: 'Currency ascending',
+          payload: 'type',
+          payload_value: 'asc',
+          type: 'text'
         }]
-      }],
-      currentFilter: null,
-      currentSort: null,
-      activePage: 1,
-      numPages: null,
-      limit: 5
+      }]
     }
   },
   components: {
     'empty': require('components/increment/generic/empty/Empty.vue'),
-    'basic-filter': require('components/increment/generic/filter/Basic.vue'),
+    'browse-images-modal': require('components/increment/generic/image/BrowseModal.vue'),
+    'filter-product': require('components/increment/generic/filter/FilterWithCalendar.vue'),
     'increment-modal': require('components/increment/generic/modal/Modal.vue'),
     Pager,
     Confirmation
@@ -164,20 +158,60 @@ export default{
     redirect(params){
       ROUTER.push(params)
     },
-    showCurrencyModal(action, item = null){
+    // _retrieve(sort, filter){
+    //   let parameter = {
+    //     condition: [{
+    //       column: filter.column,
+    //       clause: 'like',
+    //       value: filter.value + '%'
+    //     }],
+    //     sort: sort,
+    //     limit: this.limit,
+    //     offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+    //   }
+    //   this.APIRequest('fund_transfer_charges/retrieve_all', parameter).then(response => {
+    //     $('#loading').css({display: 'none'})
+    //     if(response.data.length > 0){
+    //       this.data = response.data
+    //       this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+    //     }else{
+    //       this.data = []
+    //       this.numPages = null
+    //     }
+    //   })
+    // },
+    retrieve(sort){
+      let parameter = {
+        payload: 'available_currency',
+        limit: this.limit,
+        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+      }
+      $('#loading').css({display: 'block'})
+      this.APIRequest('payloads/get_currency', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          this.data = response.data
+          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
+        }else{
+          this.data = []
+          this.numPages = null
+        }
+      })
+    },
+    showTransferModal(action, item = null){
       switch(action){
         case 'create':
-          this.currencyModal = {...createCurrency}
-          let inputs = this.currencyModal.inputs
+          this.modalCurrency = {...currencyModal}
+          let inputs = this.modalCurrency.inputs
           inputs.map(input => {
             input.value = null
           })
           break
         case 'update':
-          let modalData = {...this.currencyModal}
+          let modalData = {...this.modalCurrency}
           let parameter = {
             title: 'Update Requests',
-            route: 'fund_transfer_charges/update',
+            route: 'payloads/update',
             button: {
               left: 'Cancel',
               right: 'Update'
@@ -194,63 +228,25 @@ export default{
           modalData = {...modalData, ...parameter} // updated data without
           let object = Object.keys(item)
           modalData.inputs.map(data => {
-            if(data.variable === 'effective_date'){
+            if(data.variable === 'currency'){
               data.value = item.effective_date
             }
-            if(data.variable === 'scope'){
-              data.value = item.scope
-            }
-            if(data.variable === 'destination'){
-              data.value = item.destination
-            }
-            if(data.variable === 'type'){
-              data.value = item.type
-            }
-            if(data.variable === 'minimum_amount'){
-              data.value = item.min_amount
-            }
-            if(data.variable === 'maximum_amount'){
-              data.value = item.max_amount
-            }
-            if(data.variable === 'charge'){
-              data.value = item.charge
-            }
-            if(data.variable === 'currency'){
-              data.value = item.currency
-            }
           })
-          this.currencyModal = {...modalData}
+          this.modalCurrency = {...modalData}
           break
       }
-      $('#createCurrency').modal('show')
+      $('#modalCurrencyk').modal('show')
     },
-    retrieve(sort, filter){
-      if(sort !== null){
-        this.currentSort = sort
-      }
-      if(filter !== null){
-        this.currentFilter = filter
-      }
+    setRemoveItem(item){
+      this.$refs.confirmation.show(item.id)
+    },
+    removeItem(event){
       let parameter = {
-        condition: [{
-          column: this.currentFilter.column,
-          clause: 'like',
-          value: '%' + this.currentFilter.value + '%'
-        }],
-        sort: this.currentSort,
-        limit: this.limit,
-        offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
+        id: event.id
       }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('plans/retrieve', parameter).then(response => {
+      this.APIRequest('fund_transfer_charges/delete', parameter).then(response => {
         $('#loading').css({display: 'none'})
-        if(response.data.length > 0){
-          this.data = response.data
-          this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit) ? 1 : 0
-        }else{
-          this.data = null
-          this.numPages = null
-        }
+        this.retrieve()
       })
     },
     manageGrid(event){
@@ -260,30 +256,6 @@ export default{
         case 'list': this.listStyle = 'list'
           break
       }
-    },
-    remove(item){
-      this.$refs.confirmation.show(item.id)
-    },
-    removeItem(item){
-      let parameter = {
-        id: item.id
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('plans/delete', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      })
-    },
-    updateItem(item){
-      let parameter = {
-        id: item.id,
-        status: 'approved'
-      }
-      $('#loading').css({display: 'block'})
-      this.APIRequest('plans/update', parameter).then(response => {
-        $('#loading').css({display: 'none'})
-        this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
-      })
     }
   }
 }
