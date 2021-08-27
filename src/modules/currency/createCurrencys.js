@@ -16,8 +16,8 @@ export default {
     variable: 'currency',
     value: null,
     required: true,
-    id: 'type',
-    type: 'select_currency',
+    id: 'currency',
+    type: 'select_specified',
     options: currency
   }],
   route: 'payloads/create_currency',
