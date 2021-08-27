@@ -27,8 +27,8 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
-          <td>{{item.created_at_human}}</td>
-          <td>{{item.currency}}</td>
+          <td>{{item.created_at}}</td>
+          <td>{{item.payload_value}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
           </td>
@@ -104,7 +104,7 @@ import currencyModal from 'src/modules/currency/createCurrencys.js'
 export default{
   mounted(){
     $('#loading').css({display: 'block'})
-    // this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
+    this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
   },
   data(){
     return {
@@ -182,12 +182,14 @@ export default{
     // },
     retrieve(sort){
       let parameter = {
+        account_id: this.user.userID,
         payload: 'available_currency',
         limit: this.limit,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('payloads/get_currency', parameter).then(response => {
+        console.log('[response]', response.data)
         $('#loading').css({display: 'none'})
         if(response.data.length > 0){
           this.data = response.data
@@ -203,6 +205,10 @@ export default{
         case 'create':
           this.modalCurrency = {...currencyModal}
           let inputs = this.modalCurrency.inputs
+          this.modalCurrency.params = [{
+            variable: 'account_id',
+            value: AUTH.user.userID
+          }]
           inputs.map(input => {
             input.value = null
           })
