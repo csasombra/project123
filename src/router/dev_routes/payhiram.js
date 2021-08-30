@@ -394,6 +394,14 @@ export default{
     meta: {
       tokenRequired: true
     }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: resolve => require(['modules/admin/Settings.vue'], resolve),
+    meta: {
+      tokenRequired: true
+    }
   }
   ]
 }
