@@ -235,7 +235,7 @@ export default{
           let object = Object.keys(item)
           modalData.inputs.map(data => {
             if(data.variable === 'currency'){
-              data.value = item.effective_date
+              data.value = item.payload_value
             }
           })
           this.modalCurrency = {...modalData}
