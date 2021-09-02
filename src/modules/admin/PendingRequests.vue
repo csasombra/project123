@@ -28,7 +28,7 @@
     <div class="ledgers-container-item col-4">
       <h5 style="margin-top: 3%">Pending Requests for Partners</h5>
       <hr>
-      <table class="table table-bordered table-responsive" v-if="data != null">
+      <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
           <td>Account</td>
@@ -46,7 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <empty v-if="data === null" :title="'No Pending Requests for Partners!'" ></empty>
+    <empty v-if="data.length === 0" :title="'No Pending Requests for Partners!'" ></empty>
     </div>
     <div class="col-1"></div>
   </div>
@@ -79,7 +79,7 @@ export default{
   data(){
     return {
       user: AUTH.user,
-      data: null,
+      data: [],
       auth: AUTH,
       limit: 5,
       activePage: 0,
@@ -114,11 +114,11 @@ export default{
         if(response.data.length > 0){
           response.data.map(el => {
             if(el.status === 'pending'){
-              this.data = response.data
+              this.data.push(el)
             }
           })
         }else{
-          this.data = null
+          this.data = []
         }
       })
     },
