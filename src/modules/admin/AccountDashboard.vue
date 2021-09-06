@@ -101,9 +101,10 @@ p{
 }
 
 .incre-row{
-  width: 90%;
+  width: 95%;
   margin-left: 5%;
   margin-right: 5%;
+  overflow: hidden;
 }
 </style>
 <script>
