@@ -104,6 +104,7 @@ p{
   width: 90%;
   margin-left: 5%;
   margin-right: 5%;
+  overflow: hidden;
 }
 </style>
 <script>
