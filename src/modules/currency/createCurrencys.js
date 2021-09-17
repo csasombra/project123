@@ -2,7 +2,7 @@ import CURRENCY from 'src/currency.js'
 let currency = CURRENCY.currency.map(item => {
   return {
     label: item.long_name,
-    value: item.long_name
+    value: item.initial
   }
 })
 export default {
