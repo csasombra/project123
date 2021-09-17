@@ -25,7 +25,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
-          <td style="cursor: pointer;" @click="redirect('/thread/:' + item.request_code.code)">{{item.payload_value}}</td>
+          <td style="cursor: pointer;" @click="redirect('/thread/:' + item.request_code)">{{item.payload_value}}</td>
           <td>
               <p v-if="item.assigned_to !== null">{{item.assigned_to}}</p>
               <!--<select v-if="item.assigned_to !== null">

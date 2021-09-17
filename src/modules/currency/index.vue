@@ -216,7 +216,7 @@ export default{
         case 'update':
           let modalData = {...this.modalCurrency}
           let parameter = {
-            title: 'Update Requests',
+            title: 'Update Currency',
             route: 'payloads/update',
             button: {
               left: 'Cancel',
@@ -234,6 +234,10 @@ export default{
           modalData = {...modalData, ...parameter} // updated data without
           let object = Object.keys(item)
           modalData.inputs.map(data => {
+            this.modalCurrency.params = [{
+              variable: 'account_id',
+              value: AUTH.user.userID
+            }]
             if(data.variable === 'currency'){
               data.value = item.payload_value
             }
