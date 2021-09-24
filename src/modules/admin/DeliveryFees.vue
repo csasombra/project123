@@ -272,11 +272,17 @@ export default{
             if(data.variable === 'minimum_amount'){
               data.value = item.min_amount
             }
+            if(data.variable === 'minimum_distance'){
+              data.value = item.minimum_distance
+            }
             if(data.variable === 'maximum_amount'){
               data.value = item.max_amount
             }
-            if(data.variable === 'charge'){
-              data.value = item.charge
+            if(data.variable === 'minimum_charge'){
+              data.value = item.minimum_charge
+            }
+            if(data.variable === 'addition_charge_per_distance'){
+              data.value = item.addition_charge_per_distance
             }
             if(data.variable === 'currency'){
               data.value = item.currency
