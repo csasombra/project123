@@ -38,6 +38,7 @@
           <td>{{item.effective_date}}</td>
           <td>
             <button class="btn btn-primary" @click="showModal('update', item)">Edit</button>
+            <button class="btn btn-danger" @click="setRemoveItem()">Delete</button>
           </td>
         </tr>
       </tbody>

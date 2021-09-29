@@ -39,6 +39,7 @@
           <td>{{item.created_at_human}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
+            <button class="btn btn-danger" @click="setRemoveItem()">Delete</button>
           </td>
         </tr>
       </tbody>
