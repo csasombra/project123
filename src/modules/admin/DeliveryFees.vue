@@ -2,6 +2,7 @@
   <div class="ledger-summary-container">
     <div class="incre-row">
       <button class="btn btn-primary pull-right" @click="showModal('create')">Add</button>
+      <button class="btn btn-success pull-right" @click="showImportModal()" style="margin-right: 25px;">Import</button>
     </div>
     <basic-filter 
       v-bind:category="category" 
@@ -54,6 +55,7 @@
 
     <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
     <increment-modal :property="deliveryModal"></increment-modal>
+    <increment-modal :property="createImportModal"></increment-modal>
   </div>
 </template>
 <style scoped>
@@ -110,6 +112,7 @@ import CURRENCY from 'src/services/currency.js'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import deliveryCharges from 'src/modules/admin/CreateDeliveryCharges.js'
+import createImport from 'src/modules/admin/CreateImport.js'
 export default{
   mounted(){
     $('#loading').css({display: 'block'})
@@ -129,6 +132,7 @@ export default{
       numPages: null,
       activePage: 1,
       deliveryModal: deliveryCharges,
+      createImportModal: createImport,
       category: [{
         title: 'Sort by',
         sorting: [{
@@ -293,6 +297,14 @@ export default{
           break
       }
       $('#createTransferChargesModal').modal('show')
+    },
+    showImportModal(){
+      this.createImportModal = {...createImport}
+      let inputs = this.createImportModal.inputs
+      inputs.map(input => {
+        input.value = null
+      })
+      $('#importDataFromGoogleSheet').modal('show')
     },
     setRemoveItem(item){
       this.$refs.confirmation.show(item.id)
