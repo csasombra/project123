@@ -288,6 +288,7 @@ export default{
     showImportModal(){
       this.createImportModal = {...createImport}
       let inputs = this.createImportModal.inputs
+      this.createImportModal.route = 'spread_sheets/retrieve_transfer_charge'
       inputs.map(input => {
         input.value = null
       })
