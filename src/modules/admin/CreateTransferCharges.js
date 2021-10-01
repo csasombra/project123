@@ -15,7 +15,7 @@ let currency = countries.list.map((item, index) => {
 export default {
   id: 'createTransferChargesModal',
   size: 'modal-md',
-  title: 'Add Delivery Fee',
+  title: 'Add Transfer Fee',
   background: null,
   inputs: [{
     row: 'full',
