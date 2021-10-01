@@ -21,7 +21,7 @@ export default {
     row: 'full',
     label: 'Sheet Index',
     variable: 'sheet_index',
-    placeholder: 'Enter Sheet Index',
+    placeholder: 'Enter Sheet Name Index (e.g.Sheet1!A2:H)',
     value: null,
     required: true,
     id: 'sheet_index',
@@ -32,7 +32,7 @@ export default {
       type: 'text'
     }
   }],
-  route: 'delivery_fees/import_from_google_sheet',
+  route: 'spread_sheets/retrieve_delivery_fee',
   button: {
     left: 'Cancel',
     right: 'Submit'
