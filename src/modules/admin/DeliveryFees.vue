@@ -39,7 +39,7 @@
           <td>{{item.effective_date}}</td>
           <td>
             <button class="btn btn-primary" @click="showModal('update', item)">Edit</button>
-            <button class="btn btn-danger" @click="setRemoveItem()">Delete</button>
+            <button class="btn btn-danger" @click="setRemoveItem(item)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -49,7 +49,7 @@
       :title="'Removal Confirmation'"
       :message="'Are you sure you want to continue this action?'"
       ref="confirmation"
-      @onConfirm="removeItem"
+      @onConfirm="removeItem($event)"
       />
 
 

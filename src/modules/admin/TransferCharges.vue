@@ -40,7 +40,7 @@
           <td>{{item.created_at_human}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
-            <button class="btn btn-danger" @click="setRemoveItem()">Delete</button>
+            <button class="btn btn-danger" @click="setRemoveItem(item)">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -50,7 +50,7 @@
       :title="'Removal Confirmation'"
       :message="'Are you sure you want to continue this action?'"
       ref="confirmation"
-      @onConfirm="removeItem"
+      @onConfirm="removeItem($event)"
       />
 
 
@@ -110,7 +110,6 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
-import CURRENCY from 'src/services/currency.js'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import transferCharges from 'src/modules/admin/CreateTransferCharges.js'

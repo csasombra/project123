@@ -30,7 +30,7 @@
           <td>{{item.created_at_human}}</td>
           <td>*****{{item.code.substring(56)}}</td>
           <td>{{item.owner.username}}</td>
-          <td>{{item.receiver !== null ? item.receiver.username : null}}</td>
+          <td>{{item.details !== null ? '*****' + JSON.parse(item.details).account.code.substring(56) : null}}</td>
           <td v-if="item.amount > 0" class="text-primary"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td v-else class="text-danger"><b>{{auth.displayAmountWithCurrency(item.amount, item.currency)}}</b></td>
           <td>{{item.description}}</td>
