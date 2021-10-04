@@ -235,10 +235,9 @@ export default{
       })
     },
     retrieve(sort){
+      console.log('sort', sort)
       let parameter = {
-        sort: {
-          created_at: 'desc'
-        },
+        sort: sort,
         limit: this.limit,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
