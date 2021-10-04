@@ -137,23 +137,53 @@ export default{
       category: [{
         title: 'Sort By',
         sorting: [{
-          title: 'Date posted ascending',
+          title: 'Date Added descending',
           payload: 'created_at',
           payload_value: 'desc',
           type: 'date'
         }, {
-          title: 'Date posted ascending',
+          title: 'Date Added ascending',
           payload: 'created_at',
           payload_value: 'asc',
-          type: 'text'
+          type: 'date'
         }, {
-          title: 'Type descending',
-          payload: 'type',
+          title: 'Scope ascending',
+          payload: 'scope',
           payload_value: 'desc',
           type: 'text'
         }, {
-          title: 'Type ascending',
-          payload: 'type',
+          title: 'Scope ascending',
+          payload: 'scope',
+          payload_value: 'asc',
+          type: 'text'
+        }, {
+          title: 'Currency descending',
+          payload: 'currency',
+          payload_value: 'desc',
+          type: 'text'
+        }, {
+          title: 'Currency ascending',
+          payload: 'currency',
+          payload_value: 'asc',
+          type: 'text'
+        }, {
+          title: 'Minimum Amount descending',
+          payload: 'minimum_amount',
+          payload_value: 'desc',
+          type: 'text'
+        }, {
+          title: 'Minimum Amount ascending',
+          payload: 'minimum_amount',
+          payload_value: 'asc',
+          type: 'text'
+        }, {
+          title: 'Maximum Amount descending',
+          payload: 'maximum_amount',
+          payload_value: 'desc',
+          type: 'text'
+        }, {
+          title: 'Maximum Amount ascending',
+          payload: 'maximum_amount',
           payload_value: 'asc',
           type: 'text'
         }, {
