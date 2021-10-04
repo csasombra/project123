@@ -289,9 +289,9 @@ export default{
             if(data.variable === 'scope'){
               data.value = item.scope
             }
-            if(data.variable === 'destination'){
-              data.value = item.destination
-            }
+            // if(data.variable === 'destination'){
+            //   data.value = item.destination
+            // }
             if(data.variable === 'type'){
               data.value = item.type
             }
