@@ -144,36 +144,28 @@ export default{
           payload: 'created_at',
           payload_value: 'desc'
         }, {
-          title: 'Type ascending',
-          payload: 'type',
+          title: 'Additional Charge ascending',
+          payload: 'addition_charge_per_distance',
           payload_value: 'asc'
         }, {
-          title: 'Type descending',
-          payload: 'type',
-          payload_value: 'desc'
-        }, {
-          title: 'Charge ascending',
-          payload: 'charge',
-          payload_value: 'asc'
-        }, {
-          title: 'Charge descending',
-          payload: 'charge',
+          title: 'Additional Charge descending',
+          payload: 'addition_charge_per_distance',
           payload_value: 'desc'
         }, {
           title: 'Minimum amount ascending',
-          payload: 'min_amount',
+          payload: 'minimum_charge',
           payload_value: 'asc'
         }, {
           title: 'Minimum amount descending',
-          payload: 'min_amount',
+          payload: 'minimum_charge',
           payload_value: 'desc'
         }, {
-          title: 'Maximum amount ascending',
-          payload: 'max_amount',
+          title: 'Minimum Distance ascending',
+          payload: 'minimum_distance',
           payload_value: 'asc'
         }, {
-          title: 'Maximum amount descending',
-          payload: 'max_amount',
+          title: 'Minimum Distance descending',
+          payload: 'minimum_distance',
           payload_value: 'desc'
         }]
       }]
