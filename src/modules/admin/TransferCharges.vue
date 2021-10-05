@@ -234,9 +234,14 @@ export default{
         }
       })
     },
-    retrieve(sort){
+    retrieve(sort, filter){
       console.log('sort', sort)
       let parameter = {
+        condition: [{
+          column: filter.column,
+          clause: 'like',
+          value: filter.value + '%'
+        }],
         sort: sort,
         limit: this.limit,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
