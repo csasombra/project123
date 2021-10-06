@@ -33,7 +33,7 @@
               </select>-->
               <p v-else>No Assigned </p>
           </td>
-          <td>{{item.request_status === null ? null : item.request_status.status === 1 ? 'ON GOING' : 'COMPLETED' }}</td>
+          <td>{{item.status === 0 ? 'ON GOING' : 'COMPLETED' }}</td>
           <!-- <td>{{item.request_status.status == 1 ? 'ON GOING' : 'COMPLETED'}}</td> -->
           <!-- <td>
             <button class="btn btn-secondary" @click="messageConfirm(item, a = 'a')"><i class="fa fa-check" style="padding: 0"></i></button>
