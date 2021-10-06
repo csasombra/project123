@@ -21,6 +21,7 @@
     "child_process": "^1.0.2",
     "config-js": "^1.1.13",
     "easy-countries-list": "^1.1.0",
+    "export-to-csv": "^0.2.1",
     "firebase": "^8.2.6",
     "font-awesome": "^4.7.0",
     "fs": "0.0.1-security",
