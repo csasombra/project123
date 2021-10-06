@@ -277,25 +277,30 @@ export default{
         headers: ['Code', 'City', 'Route', 'Region', 'Longitude', 'Latitude', 'Country']
       }
       var exportData = []
-      if(this.data.length > 0){
-        for (let index = 0; index < this.data.length; index++) {
-          const element = this.data[index]
-          let obj = {
-            code: element.code,
-            city: element.city,
-            route: element.route,
-            region: element.region,
-            longitude: element.longitude,
-            latitude: element.latitude,
-            country: element.country
+      let parameter = {}
+      $('#loading').css({display: 'block'})
+      this.APIRequest('location_scopes/retrieve', parameter).then(response => {
+        $('#loading').css({display: 'none'})
+        if(response.data.length > 0){
+          for (let index = 0; index < response.data.length; index++) {
+            const element = response.data[index]
+            let obj = {
+              code: element.code,
+              city: element.city,
+              route: element.route,
+              region: element.region,
+              longitude: element.longitude,
+              latitude: element.latitude,
+              country: element.country
+            }
+            exportData.push(obj)
           }
-          exportData.push(obj)
         }
-      }
-      if(exportData.length > 0){
-        var csvExporter = new ExportToCsv(options)
-        csvExporter.generateCsv(exportData)
-      }
+        if(exportData.length > 0){
+          var csvExporter = new ExportToCsv(options)
+          csvExporter.generateCsv(exportData)
+        }
+      })
     }
   }
 }
