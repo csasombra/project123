@@ -21,7 +21,7 @@
       :limit="limit"
       v-if="data.length > 0"
     />
-
+    <button class="btn btn-primary pull-left" @click="exportToCsv()">Export to Csv</button>
     <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
@@ -86,8 +86,10 @@
 import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import propertyModal from './ScopeLocation.js'
+import COMMON from 'src/common.js'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 import Pager from 'src/components/increment/generic/pager/Pager.vue'
+import { ExportToCsv } from 'export-to-csv'
 export default{
   mounted(){
     if(this.user.type !== 'ADMIN'){
@@ -259,6 +261,41 @@ export default{
         $('#loading').css({display: 'none'})
         this.retrieve()
       })
+    },
+    exportToCsv(){
+      let options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: '',
+        useTextFile: false,
+        useBom: true,
+        // useKeysAsHeaders: true,
+        filename: COMMON.APP_NAME + '(Location Scopes)',
+        headers: ['Code', 'City', 'Route', 'Region', 'Longitude', 'Latitude', 'Country']
+      }
+      var exportData = []
+      if(this.data.length > 0){
+        for (let index = 0; index < this.data.length; index++) {
+          const element = this.data[index]
+          let obj = {
+            code: element.code,
+            city: element.city,
+            route: element.route,
+            region: element.region,
+            longitude: element.longitude,
+            latitude: element.latitude,
+            country: element.country
+          }
+          exportData.push(obj)
+        }
+      }
+      if(exportData.length > 0){
+        var csvExporter = new ExportToCsv(options)
+        csvExporter.generateCsv(exportData)
+      }
     }
   }
 }
