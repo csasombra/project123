@@ -55,7 +55,7 @@
 
 
     <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
-    <browse-images-modal></browse-images-modal>
+    <!-- <browse-images-modal></browse-images-modal> -->
     <increment-modal :property="transferModal"></increment-modal>
     <increment-modal :property="createImportModal"></increment-modal>
   </div>
@@ -134,6 +134,7 @@ export default{
       config: CONFIG,
       transferModal: transferCharges,
       createImportModal: createImport,
+      selectedFilter: null,
       category: [{
         title: 'Sort By',
         sorting: [{
@@ -236,11 +237,17 @@ export default{
     },
     retrieve(sort, filter){
       console.log('sort', sort)
+      console.log({
+        filter
+      })
+      if(filter && filter.column){
+        this.selectedItem = filter
+      }
       let parameter = {
         condition: [{
-          column: filter.column,
+          column: this.selectedItem.column,
           clause: 'like',
-          value: filter.value + '%'
+          value: this.selectedItem.value + '%'
         }],
         sort: sort,
         limit: this.limit,
