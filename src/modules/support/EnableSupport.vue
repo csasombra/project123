@@ -101,7 +101,7 @@ import Pager from 'src/components/increment/generic/pager/Pager.vue'
 import Confirmation from 'src/components/increment/generic/modal/Confirmation.vue'
 export default{
   mounted(){
-    this.retrieve({created_at: 'asc'}, {column: 'payload_value', value: ''})
+    this.retrieve({'created_at': 'asc'}, {column: 'created_at', value: ''})
   },
   data(){
     return {
@@ -117,12 +117,12 @@ export default{
       category: [{
         title: 'Sort by',
         sorting: [{
-          title: 'Assigned To ascending',
-          payload: 'assigned_to',
+          title: 'Initiator ascending',
+          payload: 'payload_value',
           payload_value: 'asc'
         }, {
-          title: 'Assigned To descending',
-          payload: 'assigned_to',
+          title: 'Initiator descending',
+          payload: 'payload_value',
           payload_value: 'desc'
         }, {
           title: 'Status ascending',
@@ -159,19 +159,26 @@ export default{
     },
     retrieve(sort, filter){
       if(sort !== null){
-        this.currentSort = sort
+        this.sort = sort
       }
       if(filter !== null){
-        this.currentFilter = filter
+        this.filter = filter
+      }
+      if(sort === null && this.sort !== null){
+        sort = this.sort
+      }
+      if(filter === null && this.filter !== null){
+        filter = this.filter
       }
       let parameter = {
         condition: [{
-          column: this.currentFilter.column,
-          clause: 'like',
-          value: '%' + this.currentFilter.value + '%'
+          column: filter.column,
+          value: filter.value !== null ? '%' + filter.value + '%' : '%%',
+          clause: 'like'
         }],
         sort: sort,
         limit: this.limit,
+        account_id: this.user.userID,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
