@@ -18,6 +18,7 @@
     <table class="table table-bordered table-responsive" v-if="data.length > 0">
       <thead>
         <tr>
+          <td>ID</td>
           <td>Created By</td>
           <td>Assigned To</td>
           <td>Status</td>
@@ -25,6 +26,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in data" :key="index">
+          <td>{{item.id}}</td>
           <td style="cursor: pointer;" @click="redirect('/thread/' + item.request_code)">{{item.account ? item.account.username : null}}</td>
           <td>
               {{item.assigned_to ? item.assigned_to : 'No Assigned'}}
@@ -115,14 +117,6 @@ export default{
       category: [{
         title: 'Sort by',
         sorting: [{
-          title: 'Initiator ascending',
-          payload: 'payload_value',
-          payload_value: 'asc'
-        }, {
-          title: 'Initiator descending',
-          payload: 'payload_value',
-          payload_value: 'desc'
-        }, {
           title: 'Assigned To ascending',
           payload: 'assigned_to',
           payload_value: 'asc'

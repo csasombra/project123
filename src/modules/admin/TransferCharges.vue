@@ -138,16 +138,6 @@ export default{
       category: [{
         title: 'Sort By',
         sorting: [{
-          title: 'Date Added descending',
-          payload: 'created_at',
-          payload_value: 'desc',
-          type: 'date'
-        }, {
-          title: 'Date Added ascending',
-          payload: 'created_at',
-          payload_value: 'asc',
-          type: 'date'
-        }, {
           title: 'Scope ascending',
           payload: 'scope',
           payload_value: 'desc',
@@ -247,7 +237,7 @@ export default{
         condition: [{
           column: this.selectedItem.column,
           clause: 'like',
-          value: this.selectedItem.value + '%'
+          value: '%' + this.selectedItem.value + '%'
         }],
         sort: sort,
         limit: this.limit,
