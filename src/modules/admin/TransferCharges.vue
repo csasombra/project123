@@ -236,10 +236,6 @@ export default{
       })
     },
     retrieve(sort, filter){
-      console.log('sort', sort)
-      console.log({
-        filter
-      })
       if(filter && filter.column){
         this.selectedItem = filter
       }
@@ -250,12 +246,13 @@ export default{
           value: this.selectedItem.value + '%'
         }],
         sort: sort,
-        limit: this.limit,
+        limit: 100,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('fund_transfer_charges/retrieve_all', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        console.log(response.data)
         if(response.data.length > 0){
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
