@@ -117,14 +117,14 @@ export default{
       category: [{
         title: 'Sort by',
         sorting: [{
-          title: 'Creator ascending',
-          payload: 'payload_value',
-          payload_value: 'asc'
-        }, {
-          title: 'Creator descending',
-          payload: 'payload_value',
-          payload_value: 'desc'
-        }, {
+        //   title: 'Creator ascending',
+        //   payload: 'payload_value',
+        //   payload_value: 'asc'
+        // }, {
+        //   title: 'Creator descending',
+        //   payload: 'id',
+        //   payload_value: 'desc'
+        // }, {
           title: 'ID ascending',
           payload: 'id',
           payload_value: 'asc'
