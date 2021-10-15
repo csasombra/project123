@@ -138,26 +138,6 @@ export default{
       category: [{
         title: 'Sort By',
         sorting: [{
-          title: 'Scope ascending',
-          payload: 'scope',
-          payload_value: 'desc',
-          type: 'text'
-        }, {
-          title: 'Scope ascending',
-          payload: 'scope',
-          payload_value: 'asc',
-          type: 'text'
-        }, {
-          title: 'Currency descending',
-          payload: 'currency',
-          payload_value: 'desc',
-          type: 'text'
-        }, {
-          title: 'Currency ascending',
-          payload: 'currency',
-          payload_value: 'asc',
-          type: 'text'
-        }, {
           title: 'Minimum Amount descending',
           payload: 'minimum_amount',
           payload_value: 'desc',
