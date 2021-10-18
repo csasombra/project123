@@ -45,20 +45,20 @@ export default {
       size: 1,
       type: 'text'
     }
-  // }, {
-    // row: 'full',
-    // label: 'Destination',
-    // variable: 'destination',
-    // placeholder: 'Destination',
-    // value: null,
-    // required: false,
-    // id: 'destination',
-    // type: 'input',
-    // inputType: 'text'
-    // validation: {
-    //   size: 1,
-    //   type: 'text'
-    // }
+  }, {
+    row: 'full',
+    label: 'Destination',
+    variable: 'destination',
+    placeholder: 'Destination',
+    value: null,
+    required: false,
+    id: 'destination',
+    type: 'input',
+    inputType: 'text',
+    validation: {
+      size: 1,
+      type: 'text'
+    }
   }, {
     row: 'full',
     label: 'Type',

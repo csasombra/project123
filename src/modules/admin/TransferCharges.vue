@@ -26,6 +26,7 @@
           <td>Minimum Amount</td>
           <td>Maximum Amount</td>
           <td>Charge</td>
+          <td>Destination</td>
           <td>Date Added</td>
           <td>Actions</td>
         </tr>
@@ -37,6 +38,7 @@
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.min_amount, item.currency)}}</td>
           <td class="text-primary">{{auth.displayAmountWithCurrency(item.max_amount, item.currency)}}</td>
           <td class="text-danger">{{item.type === 'percentage' ? item.charge + ' %' : item.currency + ' ' + item.charge}}</td>
+          <td class="text-danger">{{item.destination}}</td>
           <td>{{item.created_at_human}}</td>
           <td>
             <button class="btn btn-primary" @click="showTransferModal('update', item)">Edit</button>
@@ -268,9 +270,9 @@ export default{
             if(data.variable === 'scope'){
               data.value = item.scope
             }
-            // if(data.variable === 'destination'){
-            //   data.value = item.destination
-            // }
+            if(data.variable === 'destination'){
+              data.value = item.destination
+            }
             if(data.variable === 'type'){
               data.value = item.type
             }
