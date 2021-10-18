@@ -51,10 +51,18 @@ export default {
     this.auth.messenger.data = null
   },
   mounted(){
+    if(this.$route.params != null){
+      this.statuss = this.$route.params.status
+      this.statusType = this.statuss
+      this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''}, this.statuss)
+    }else{
+      this.statuss = null
+    }
   },
   data(){
     return {
       data: [],
+      statuss: null,
       user: AUTH.user,
       auth: AUTH,
       limit: 5,
