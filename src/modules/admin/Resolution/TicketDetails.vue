@@ -1,57 +1,56 @@
 <template>
-<div id="holder">
-  <div class="title" style="margin-top: 25px;">
-    <label class="text-primary action-link" @click="redirect('/tickets')"><i class="fas fa-arrow-left"></i> <b> back </b>to previous</label>
-  </div>
-  <span v-if="data.length !== 0">
+  <div id="holder">
+    <div class="title" style="margin-top: 25px;">
+      <label class="text-primary action-link" @click="redirect('/tickets')"><i class="fas fa-arrow-left"></i> <b> back </b>to previous</label>
+    </div>
+    <span v-if="data.length !== 0">
     <span id="title">#{{data.id}} <b>{{data.title}}</b></span>
       <!-- <br><span>{{status}} {{ timeIntervalRes + ' ago'}} by {{data.account_id}}</span> -->
     </span>
-   <div class="row" >
-    <div class="col-6" id="detail">
-      <!-- <form> -->
-        <!-- <div class="form-group">
-          <label for="text"><b>Title</b></label>
-          <label id="text">{{title}}</label> -->
-          <!-- <input type="text" class="form-control" v-model="title" id="text"> -->
-        <!-- </div> -->
-        <!-- <div class="form-group"> -->
-          <label for="pwd"><b>Details</b></label>
-          <p type="password"  id="pwd">{{ detail }}</p>
-        <!-- </div> -->
-        <!-- <span><b>Image attachments</b></span><br> -->
+    <div class="row" >
+      <div class="col-6" id="detail">
+        <!-- <form> -->
+          <!-- <div class="form-group">
+            <label for="text"><b>Title</b></label>
+            <label id="text">{{title}}</label> -->
+            <!-- <input type="text" class="form-control" v-model="title" id="text"> -->
+          <!-- </div> -->
+          <!-- <div class="form-group"> -->
+            <label for="pwd"><b>Details</b></label>
+            <p type="password"  id="pwd">{{ detail }}</p>
+          <!-- </div> -->
+          <!-- <span><b>Image attachments</b></span><br> -->
 
-        <!-- <multiple-img-uploader  v-if="data.length !== 0" :imageList="imageList" :isEditableProp="editable"/> -->
+          <!-- <multiple-img-uploader  v-if="data.length !== 0" :imageList="imageList" :isEditableProp="editable"/> -->
 
-      <!-- </form> -->
-    <div  id="uneditableDetail">
-      <div>
-        <ticket-type v-if="data.length !== 1" :isEditable="{isEditable: user.userID === data.account_id, typeResult: data.type}"/>
-      <hr>
-      <br>
-      <span>Assignee</span>
-      <br>
-      <br>
-      <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ assignee != null ? assignee : data.assignTo != null ? data.assignTo.username : 'Add assignee resolver'}}</u></b></p>
-      <assignees ref="assign" :isAssigned="data.assignTo"></assignees>
-      <hr>
-      <br>
-      <span>Status</span>
-      <select :required="true" class="form-control" v-model="data.status">
-        <option v-for="(option, index) in options" :selected="data.status" v-bind:key="index">{{option.name}}</option>
-      </select>
+        <!-- </form> -->
+      <div  id="uneditableDetail">
+        <div>
+          <ticket-type v-if="data.length !== 1" :isEditable="{isEditable: user.userID === data.account_id, typeResult: data.type}"/>
+          <hr>
+          <br>
+          <span>Assignee</span>
+          <br>
+          <br>
+          <p @click="showAssignees()" style="color:grey; cursor: pointer;"><b><u><i class="fas fa-user-plus"></i>&nbsp;&nbsp;{{ assignee != null ? assignee : data.assignTo != null ? data.assignTo.username : 'Add assignee resolver'}}</u></b></p>
+          <assignees ref="assign" :isAssigned="data.assignTo"></assignees>
+          <hr>
+          <br>
+          <span>Status</span>
+          <select :required="true" class="form-control" v-model="data.status">
+            <option v-for="(option, index) in options" :selected="data.status" v-bind:key="index">{{option.name}}</option>
+          </select>
+        </div>
       </div>
+      <br>
+      <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button>
     </div>
-  <br>
-    <button type="button" class="btn btn-primary mb-5" @click="update()" id="update">Update</button>
+    <br>
+    <div class="col-6">
+      <comments v-if="data !== null" :id="data.id"/>
+    </div>
+    </div>
   </div>
-  <br>
-  <div class="col-6">
-    <comments v-if="data !== null" :id="data.id"/>
-  </div>
-  </div>
-</div>
-
 </template>
 
 <script>
@@ -118,7 +117,7 @@ export default {
         $('#loading').css({display: 'none'})
         if(response.data === true) {
           // this.retrieveItem(this.$route.params.id)
-          this.redirect('/tickets')
+          this.redirect('/tickets/' + this.data.status)
         }
       })
     },

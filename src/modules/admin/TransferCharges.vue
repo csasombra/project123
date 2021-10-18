@@ -55,7 +55,7 @@
 
 
     <empty v-if="data === null" :title="'No charges specified!'" :action="'Click add to create.'"></empty>
-    <browse-images-modal></browse-images-modal>
+    <!-- <browse-images-modal></browse-images-modal> -->
     <increment-modal :property="transferModal"></increment-modal>
     <increment-modal :property="createImportModal"></increment-modal>
   </div>
@@ -134,39 +134,10 @@ export default{
       config: CONFIG,
       transferModal: transferCharges,
       createImportModal: createImport,
+      selectedFilter: null,
       category: [{
         title: 'Sort By',
         sorting: [{
-          title: 'Date Added descending',
-          payload: 'created_at',
-          payload_value: 'desc',
-          type: 'date'
-        }, {
-          title: 'Date Added ascending',
-          payload: 'created_at',
-          payload_value: 'asc',
-          type: 'date'
-        }, {
-          title: 'Scope ascending',
-          payload: 'scope',
-          payload_value: 'desc',
-          type: 'text'
-        }, {
-          title: 'Scope ascending',
-          payload: 'scope',
-          payload_value: 'asc',
-          type: 'text'
-        }, {
-          title: 'Currency descending',
-          payload: 'currency',
-          payload_value: 'desc',
-          type: 'text'
-        }, {
-          title: 'Currency ascending',
-          payload: 'currency',
-          payload_value: 'asc',
-          type: 'text'
-        }, {
           title: 'Minimum Amount descending',
           payload: 'minimum_amount',
           payload_value: 'desc',
@@ -235,20 +206,23 @@ export default{
       })
     },
     retrieve(sort, filter){
-      console.log('sort', sort)
+      if(filter && filter.column){
+        this.selectedItem = filter
+      }
       let parameter = {
         condition: [{
-          column: filter.column,
+          column: this.selectedItem.column,
           clause: 'like',
-          value: filter.value + '%'
+          value: '%' + this.selectedItem.value + '%'
         }],
         sort: sort,
-        limit: this.limit,
+        limit: 100,
         offset: (this.activePage > 0) ? ((this.activePage - 1) * this.limit) : this.activePage
       }
       $('#loading').css({display: 'block'})
       this.APIRequest('fund_transfer_charges/retrieve_all', parameter).then(response => {
         $('#loading').css({display: 'none'})
+        console.log(response.data)
         if(response.data.length > 0){
           this.data = response.data
           this.numPages = parseInt(response.size / this.limit) + (response.size % this.limit ? 1 : 0)
