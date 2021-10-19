@@ -218,7 +218,7 @@ export default{
       tokenRequired: true
     }
   }, {
-    path: '/thread/:code?',
+    path: '/thread/:code',
     name: 'thread',
     component: resolve => require(['modules/messengervue/Payhiram.vue'], resolve),
     meta: {
@@ -340,7 +340,7 @@ export default{
     }
   },
   {
-    path: '/tickets',
+    path: '/tickets/:status?',
     name: 'issues',
     component: resolve => require(['modules/admin/Resolution/Ticket.vue'], resolve),
     meta: {

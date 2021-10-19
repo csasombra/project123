@@ -26,7 +26,8 @@
           <td>{{item.currency + ' ' + item.amount}}</td>
           <td>{{item.status}}</td>
           <td>
-            <i class="fas fa-check text-primary" @click="updateItem(item)"></i>
+            <i class="fas fa-check text-primary" @click="updateItem(item, 'approved')"></i>
+            <i class="fas fa-ban text-danger" @click="updateItem(item, 'disapproved')"></i>
             <i class="fas fa-trash text-danger" @click="remove(item)"></i>
           </td>
         </tr>
@@ -209,13 +210,14 @@ export default{
         this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
       })
     },
-    updateItem(item){
+    updateItem(item, status){
       let parameter = {
         id: item.id,
-        status: 'approved'
+        status: status,
+        account_id: item.account_id
       }
       $('#loading').css({display: 'block'})
-      this.APIRequest('plans/update', parameter).then(response => {
+      this.APIRequest('plans/update_with_notification', parameter).then(response => {
         $('#loading').css({display: 'none'})
         this.retrieve({created_at: 'desc'}, {column: 'created_at', value: ''})
       })
