@@ -711,8 +711,7 @@ import CONFIG from '../../config.js'
 export default {
   mounted(){
     this.retrieve({
-      column: 'created_at',
-      value: 'desc'
+      created_at: 'desc'
     })
   },
   data(){
