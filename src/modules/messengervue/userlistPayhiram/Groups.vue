@@ -141,7 +141,7 @@ import ROUTER from 'src/router'
 import AUTH from 'src/services/auth'
 import CONFIG from 'src/config.js'
 import COMMON from 'src/common.js'
-import comments from 'modules/admin/Resolution/Comments.vue'
+import comments from 'src/components/increment/support/Resolution/Comments.vue'
 export default {
   mounted(){
     this.retrieveRequirements()

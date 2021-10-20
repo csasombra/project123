@@ -342,7 +342,7 @@ export default{
   {
     path: '/tickets/:status?',
     name: 'issues',
-    component: resolve => require(['modules/admin/Resolution/Ticket.vue'], resolve),
+    component: resolve => require(['components/increment/support/Resolution/Ticket.vue'], resolve),
     meta: {
       tokenRequired: true
     }
@@ -350,7 +350,7 @@ export default{
   {
     path: '/tickets/details/:id',
     name: 'issuesDetail',
-    component: resolve => require(['modules/admin/Resolution/TicketDetails.vue'], resolve),
+    component: resolve => require(['components/increment/support/Resolution/TicketDetails.vue'], resolve),
     meta: {
       tokenRequired: true
     }
@@ -358,7 +358,7 @@ export default{
   {
     path: '/tickets/create',
     name: 'ticketCreate',
-    component: resolve => require(['modules/admin/Resolution/CreateTicket.vue'], resolve),
+    component: resolve => require(['components/increment/support/Resolution/CreateTicket.vue'], resolve),
     meta: {
       tokenRequired: true
     }
